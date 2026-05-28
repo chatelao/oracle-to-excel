@@ -34,12 +34,19 @@ Any combinations of source queries and target sheets / files are possible:
 
 ## Command-Line Interface (CLI)
 - Every option should be available as short and long form
+- Allow to use a .ini/TOML file to configure the system.
+- Provide a .jar of the CLI as release asset with every release.
 
 ## Database
 - If SQL statements are required, use the oldest, most common standard dialect available to improve cross-plattform compatibility.
 - Draw database schematics as plantUML entities with crowfoot notation.
+- For bigger applications with submodules, draw `TOP_SCHEMA_ENTITIES.puml` without any fields.
 
-# `ROADMAP.md` handling
+## HOWTO
+- Keep `src/install.sh` to install all tools to build the application (test only tools, see below)
+- Used “ReadTheDocs.org” (RTD) for documentation publishing from main branch
+
+# `*ROADMAP.md` handling
 - The `ROADMAP.md` is the final plan to implement the `CONCEPT.md` and `DESIGN.md` to achive the top goal
 - Define the steps in a way to allow for parallelization by defining interfaces only first and implementing functions later.
 - The `ROADMAP.md` file is structured into several key sections:
@@ -56,13 +63,9 @@ Any combinations of source queries and target sheets / files are possible:
 - The progress is updated with every increment.
 - The finished tasks are linked to the corresponding issue and timestamped at the end of the line.
 
-# HOWTO
-- Keep `src/install.sh` to install all tools to build the application (test only tools, see below)
-- Used “ReadTheDocs.org” (RTD) for documentation publishing from main branch
-- Provide a .jar CLI as release asset with every release.
-- Allow to use a .ini/TOML file to configure the system.
+# `*TEST.md`
 
-# Testing Locally & with Github Action Workflow (GH Action WF)
+## Testing Locally & with Github Action Workflow (GH Action WF)
 - Setup the empty CI/CD pipeline before coding anything
 - Use `test/install.sh` to install test tools.
 - Write CI/CD test independent as `/test/` script of the Github action workflows
