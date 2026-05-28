@@ -1,4 +1,4 @@
-#  sheet
+#  Project Goal
 Download one or more queries from an Oracle-DB into multiple sheets of an Excel.
 
 Any combinations of source queries and target sheets / files are possible:
