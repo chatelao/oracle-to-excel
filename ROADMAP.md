@@ -39,7 +39,7 @@ Setup the development environment and CI/CD pipelines.
 - [ ] Initialize Maven project with `pom.xml`.
 - [ ] Create `src/install.sh` for build tools.
 - [ ] Create `test/install.sh` for test tools.
-- [ ] Setup GitHub Actions CI/CD workflow (empty pipeline).
+- [ ] Setup GitHub Actions CI/CD workflow with compilation & tests.
 - [ ] Configure ReadTheDocs (RTD) for documentation publishing.
 
 ## Phase 3: Core Engine Development
