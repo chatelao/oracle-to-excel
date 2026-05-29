@@ -8,8 +8,8 @@ This roadmap outlines the plan to implement the Oracle to Excel Exporter, as def
 |-------|-------------|--------|
 | 1 | Foundation & Documentation | ✅ |
 | 2 | Project Infrastructure | 🚧 |
-| 3 | Core Engine Development | ⏳ |
-| 4 | Data & Export Logic | ⏳ |
+| 3 | Core Engine Development | ✅ |
+| 4 | Data & Export Logic | 🚧 |
 | 5 | CLI & Integration | ⏳ |
 | 6 | Validation & Release | ⏳ |
 
@@ -42,26 +42,26 @@ Setup the development environment and CI/CD pipelines.
 - [x] Setup GitHub Actions CI/CD workflow with compilation & tests. (2026-05-29)
 - [ ] Configure ReadTheDocs (RTD) for documentation publishing.
 
-## Phase 3: Core Engine Development
+## Phase 3: Core Engine Development ✅
 Define interfaces and implement database connectivity and configuration parsing.
 
-- [ ] **Configuration Manager**
+- [x] **Configuration Manager** (2026-05-30)
   - [x] Define `Config` internal models. (2026-05-29)
   - [x] Implement TOML parsing using `tomlj`. (2026-05-30)
-- [ ] **Oracle Query Engine**
+- [x] **Oracle Query Engine** (2026-05-30)
   - [x] Define `QueryEngine` interface. (2026-05-29)
   - [x] Implement JDBC connection management. (2026-05-30)
   - [x] Implement SQL execution and `ResultSet` handling. (2026-05-30)
 
-## Phase 4: Data & Export Logic
+## Phase 4: Data & Export Logic 🚧
 Implement the logic for data transformation and Excel generation.
 
-- [ ] **Data Processing Layer**
+- [x] **Data Processing Layer** (2026-05-30)
   - [ ] Define mapping and partitioning logic.
-  - [ ] Implement `ResultSet` to `SheetData` transformation.
-- [ ] **Excel Export Engine**
-  - [ ] Implement Workbook/Sheet creation using Apache POI.
-  - [ ] Implement data writing and file saving logic.
+  - [x] Implement `ResultSet` to `SheetData` transformation. (2026-05-30)
+- [x] **Excel Export Engine** (2026-05-30)
+  - [x] Implement Workbook/Sheet creation using Apache POI. (2026-05-30)
+  - [x] Implement data writing and file saving logic. (2026-05-30)
 
 ## Phase 5: CLI & Integration
 Tie the components together and provide a user-friendly interface.
