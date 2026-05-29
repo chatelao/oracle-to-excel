@@ -57,7 +57,8 @@ public class OracleIntegrationTest {
                     "[[exports]]\n" +
                     "filename = \"" + exportPath.toString().replace("\\", "\\\\") + "\"\n" +
                     "sheets = [\n" +
-                    "    { name = \"OracleData\", query = \"SELECT * FROM test_data\" }\n" +
+                    "    { name = \"OracleData\", query = \"SELECT * FROM test_data\" },\n" +
+                    "    { name = \"LargeOracleData\", query = \"SELECT * FROM large_test_data\" }\n" +
                     "]\n";
             Files.writeString(configPath, configContent);
 
