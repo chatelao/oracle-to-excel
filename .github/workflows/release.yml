@@ -26,12 +26,16 @@ jobs:
 
     - name: Prepare Release Asset
       run: |
+        # Extract version from tag (e.g., v0.1.0 -> 0.1.0)
+        VERSION=${GITHUB_REF#refs/tags/v}
         # Find the shaded jar (it's the one without 'original-' prefix)
         JAR_PATH=$(ls target/oracle-to-excel-[0-9]*.jar | head -n 1)
-        cp "$JAR_PATH" target/oracle-to-excel-cli.jar
+        cp "$JAR_PATH" "target/oracle-to-excel-cli-${VERSION}.jar"
+        cp "$JAR_PATH" "target/oracle-to-excel-cli-latest.jar"
 
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
-        files: target/oracle-to-excel-cli.jar
+        files: |
+          target/oracle-to-excel-cli-*.jar
         generate_release_notes: true
