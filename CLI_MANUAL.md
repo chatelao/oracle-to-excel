@@ -7,6 +7,7 @@ This manual provides a comprehensive guide on how to use the Oracle to Excel Exp
 2. [Installation](#installation)
 3. [Basic Usage](#basic-usage)
 4. [Configuration Guide](#configuration-guide)
+    - [Comments and Variables](#comments-and-variables)
     - [Database Configuration](#database-configuration)
     - [Export Configuration](#export-configuration)
     - [Sheet Configuration](#sheet-configuration)
@@ -59,21 +60,29 @@ java -jar target/oracle-to-excel-0.1.0-SNAPSHOT.jar --config path/to/config.toml
 
 The configuration is defined in a [TOML](https://toml.io/) file.
 
+### Comments and Variables
+- **Comments**: Use the `#` symbol to add comments. Everything from the `#` to the end of the line is ignored.
+- **Variables**: Values (such as database credentials or file paths) are defined directly as key-value pairs within the TOML file.
+
 ### Database Configuration
 The `[database]` section defines the connection details.
 
 ```toml
 [database]
+# The JDBC connection URL for the Oracle database
 url = "jdbc:oracle:thin:@//localhost:1521/FREEPDB1"
+# Database user account
 username = "system"
+# Password for the database user (stored in plain text; ensure file permissions are restricted)
 password = "password"
 ```
 
 ### Export Configuration
-The `[[exports]]` array defines one or more export tasks (files).
+The `[[exports]]` array defines one or more export tasks, each corresponding to a physical Excel file.
 
 ```toml
 [[exports]]
+# The name of the target Excel file
 filename = "output_file.xlsx"
 ```
 
@@ -98,9 +107,12 @@ Export a single query to one sheet in one file.
 
 ```toml
 [[exports]]
+# Target filename
 filename = "employees.xlsx"
   [[exports.sheets]]
+  # Name of the worksheet
   name = "All_Employees"
+  # SQL query to fetch data
   query = "SELECT * FROM employees"
 ```
 
@@ -113,6 +125,7 @@ filename = "large_report.xlsx"
   [[exports.sheets]]
   name = "Data"
   query = "SELECT * FROM large_table"
+  # Maximum number of rows per worksheet
   partition_size = 10000
 ```
 This will create sheets named `Data_1`, `Data_2`, etc.
@@ -121,6 +134,7 @@ This will create sheets named `Data_1`, `Data_2`, etc.
 Multiple queries into multiple sheets and files.
 
 ```toml
+# First file: HR reports
 [[exports]]
 filename = "hr_reports.xlsx"
   [[exports.sheets]]
@@ -130,6 +144,7 @@ filename = "hr_reports.xlsx"
   name = "Jobs"
   query = "SELECT * FROM jobs"
 
+# Second file: Financial reports
 [[exports]]
 filename = "financial_reports.xlsx"
   [[exports.sheets]]
@@ -151,6 +166,7 @@ filename = "sales_by_region.xlsx"
   [[exports.sheets]]
   name = "Sales"
   query = "SELECT * FROM sales"
+  # Column(s) whose values will be appended to the sheet name
   name_columns = ["REGION"]
 ```
 If `REGION` has values 'North' and 'South', you will get sheets `Sales_North` and `Sales_South`.
@@ -162,6 +178,7 @@ filename = "sales_report.xlsx"
   [[exports.sheets]]
   name = "Data"
   query = "SELECT * FROM sales"
+  # Column(s) whose values will be appended to the filename
   filename_columns = ["YEAR"]
 ```
 If `YEAR` has 2023 and 2024, it will create `sales_report_2023.xlsx` and `sales_report_2024.xlsx`.
@@ -175,6 +192,7 @@ filename = "contact_list.xlsx"
   [[exports.sheets]]
   name = "Contacts"
   query = "SELECT first_name, last_name, email, phone_number, id FROM users"
+  # Explicitly select and order columns for export
   columns = ["LAST_NAME", "FIRST_NAME", "EMAIL"]
 ```
 Only `LAST_NAME`, `FIRST_NAME`, and `EMAIL` will be exported, in that specific order.
