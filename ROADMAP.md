@@ -12,14 +12,15 @@ This roadmap outlines the plan to implement the Oracle to Excel Exporter, as def
 | 4 | Data & Export Logic | ✅ |
 | 5 | CLI & Integration | ✅ |
 | 6 | Validation & Release | ✅ |
+| 7 | Advanced Mapping & Splitting | ✅ |
 
 ## Goals
 
 - **UC1: Simple Export**: Download one query into one sheet and/or file ✅
-- **UC2: Data Split**: Download one query into multiple sheets and/or file ✅
+- **UC2: Data Split**: Download one query into multiple sheets and/or file ✅ (2026-05-29)
 - **UC3: Consolidated Report**: Download multiple queries into one sheet and/or file ⏳
-- **UC4: Complex Batch Export**: Download multiple queries into multiple sheets and/or files ⏳
-- **Automated CLI Tool**: Standalone JAR for easy distribution ⏳
+- **UC4: Complex Batch Export**: Download multiple queries into multiple sheets and/or files ✅ (2026-05-29)
+- **Automated CLI Tool**: Standalone JAR for easy distribution ✅ (2026-05-29)
 
 ---
 
@@ -80,3 +81,11 @@ Ensure quality and distribute the tool.
 - [x] Verify use cases (UC1-UC4). (2026-05-29)
 - [x] Generate standalone JAR as a release asset. (2026-05-29)
 - [x] Finalize `README.md` with usage instructions and GitHub Pages link. (2026-05-29)
+
+## Phase 7: Advanced Mapping & Splitting ✅
+Support configurable column selection and category-based splitting.
+
+- [x] Support column selection and ordering via `columns` configuration. (2026-05-29)
+- [x] Implement dynamic sheet naming via `name_columns`. (2026-05-29)
+- [x] Implement dynamic file naming via `filename_columns`. (2026-05-29)
+- [x] Integrate splitting with row-based partitioning. (2026-05-29)

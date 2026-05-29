@@ -85,4 +85,42 @@ public class MainIntegrationTest {
             assertTrue(Files.exists(exportPath), "Large export file should exist at " + exportPath);
         }
     }
+
+    @Test
+    public void testColumnMappingAndSplitting() throws Exception {
+        String dbUrl = "jdbc:h2:mem:mapping_test;DB_CLOSE_DELAY=-1";
+        try (Connection conn = DriverManager.getConnection(dbUrl, "sa", "")) {
+            try (Statement stmt = conn.createStatement()) {
+                stmt.execute("CREATE TABLE map_test (id INT, name VARCHAR(255), country VARCHAR(255), region VARCHAR(255))");
+                stmt.execute("INSERT INTO map_test VALUES (1, 'Alice', 'USA', 'West')");
+                stmt.execute("INSERT INTO map_test VALUES (2, 'Bob', 'USA', 'East')");
+                stmt.execute("INSERT INTO map_test VALUES (3, 'Charlie', 'UK', 'London')");
+            }
+
+            Path configPath = tempDir.resolve("mapping_config.toml");
+            Path baseExportPath = tempDir.resolve("report.xlsx");
+
+            String configContent = "[database]\n" +
+                    "url = \"" + dbUrl + "\"\n" +
+                    "username = \"sa\"\n" +
+                    "password = \"\"\n" +
+                    "\n" +
+                    "[[exports]]\n" +
+                    "filename = \"" + baseExportPath.toString().replace("\\", "\\\\") + "\"\n" +
+                    "sheets = [\n" +
+                    "    { name = \"Data\", query = \"SELECT * FROM map_test\", columns = [\"NAME\", \"ID\"], filename_columns = [\"COUNTRY\"], name_columns = [\"REGION\"] }\n" +
+                    "]\n";
+            Files.writeString(configPath, configContent);
+
+            int exitCode = Main.execute(new String[]{"-c", configPath.toString()});
+            assertEquals(0, exitCode);
+
+            // Expected files: report_USA.xlsx, report_UK.xlsx
+            Path usaExport = tempDir.resolve("report_USA.xlsx");
+            Path ukExport = tempDir.resolve("report_UK.xlsx");
+
+            assertTrue(Files.exists(usaExport), "USA export should exist");
+            assertTrue(Files.exists(ukExport), "UK export should exist");
+        }
+    }
 }
