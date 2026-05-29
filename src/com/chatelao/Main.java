@@ -53,7 +53,7 @@ public class Main implements Callable<Integer> {
                     entry.errorMessage != null ? entry.errorMessage : ""
             ));
         }
-        return new SheetData(sheetName, columns, rows);
+        return new SheetData(sheetName, columns, rows, null, null, 0, 0);
     }
 
     private static class AuditEntry {

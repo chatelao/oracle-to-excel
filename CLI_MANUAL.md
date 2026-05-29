@@ -104,6 +104,8 @@ The `[[exports.sheets]]` array (nested under an export) defines the sheets withi
 | `name` | String | The base name for the Excel sheet. |
 | `query` | String | The SQL query to execute. |
 | `partition_size` | Integer | (Optional) Max rows per sheet. Splits into `name_1`, `name_2`, etc. |
+| `top_offset` | Integer | (Optional) Number of empty rows at the top of the sheet. |
+| `left_offset` | Integer | (Optional) Number of empty columns at the left of the sheet. |
 | `columns` | Array | (Optional) List of columns to include and their order. |
 | `sheetname_columns` | Array | (Optional) Columns used to dynamically name sheets. |
 | `filename_columns` | Array | (Optional) Columns used to dynamically name files. |

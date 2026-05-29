@@ -57,6 +57,16 @@ public class TomlConfigLoader {
                             sheetConfig.setPartitionSize(partitionSize.intValue());
                         }
 
+                        Long topOffset = sheetTable.getLong("top_offset");
+                        if (topOffset != null) {
+                            sheetConfig.setTopOffset(topOffset.intValue());
+                        }
+
+                        Long leftOffset = sheetTable.getLong("left_offset");
+                        if (leftOffset != null) {
+                            sheetConfig.setLeftOffset(leftOffset.intValue());
+                        }
+
                         TomlArray columnsArray = sheetTable.getArray("columns");
                         if (columnsArray != null) {
                             sheetConfig.setColumns(toStringList(columnsArray));

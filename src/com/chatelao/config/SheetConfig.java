@@ -11,6 +11,8 @@ public class SheetConfig {
     private List<String> sheetnameColumns;
     private List<String> filenameColumns;
     private Map<String, String> columnColors;
+    private Integer topOffset;
+    private Integer leftOffset;
 
     public String getName() {
         return name;
@@ -66,5 +68,21 @@ public class SheetConfig {
 
     public void setColumnColors(Map<String, String> columnColors) {
         this.columnColors = columnColors;
+    }
+
+    public Integer getTopOffset() {
+        return topOffset;
+    }
+
+    public void setTopOffset(Integer topOffset) {
+        this.topOffset = topOffset;
+    }
+
+    public Integer getLeftOffset() {
+        return leftOffset;
+    }
+
+    public void setLeftOffset(Integer leftOffset) {
+        this.leftOffset = leftOffset;
     }
 }
