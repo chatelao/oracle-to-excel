@@ -72,11 +72,20 @@ public class TomlConfigLoader {
                             sheetConfig.setFilenameColumns(toStringList(filenameColumnsArray));
                         }
 
-                        TomlTable columnColorsTable = sheetTable.getTable("column_colors");
-                        if (columnColorsTable != null) {
+                        Object columnColorsObj = sheetTable.get("column_colors");
+                        if (columnColorsObj instanceof TomlTable columnColorsTable) {
                             Map<String, String> columnColors = new HashMap<>();
                             for (String key : columnColorsTable.keySet()) {
                                 columnColors.put(key, columnColorsTable.getString(key));
+                            }
+                            sheetConfig.setColumnColors(columnColors);
+                        } else if (columnColorsObj instanceof TomlArray columnColorsArray) {
+                            Map<String, String> columnColors = new HashMap<>();
+                            for (int k = 0; k < columnColorsArray.size(); k++) {
+                                TomlTable colorTable = columnColorsArray.getTable(k);
+                                for (String key : colorTable.keySet()) {
+                                    columnColors.put(key, colorTable.getString(key));
+                                }
                             }
                             sheetConfig.setColumnColors(columnColors);
                         }
