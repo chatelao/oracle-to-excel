@@ -39,17 +39,17 @@ Setup the development environment and CI/CD pipelines.
 - [x] Initialize Maven project with `pom.xml`. (2026-05-28)
 - [x] Create `src/install.sh` for build tools. (2026-05-28)
 - [x] Create `test/install.sh` for test tools. (2026-05-28)
-- [ ] Setup GitHub Actions CI/CD workflow with compilation & tests.
+- [x] Setup GitHub Actions CI/CD workflow with compilation & tests. (2026-05-29)
 - [ ] Configure ReadTheDocs (RTD) for documentation publishing.
 
 ## Phase 3: Core Engine Development
 Define interfaces and implement database connectivity and configuration parsing.
 
 - [ ] **Configuration Manager**
-  - [ ] Define `Config` internal models.
+  - [x] Define `Config` internal models. (2026-05-29)
   - [ ] Implement TOML parsing using `tomlj`.
 - [ ] **Oracle Query Engine**
-  - [ ] Define `QueryEngine` interface.
+  - [x] Define `QueryEngine` interface. (2026-05-29)
   - [ ] Implement JDBC connection management.
   - [ ] Implement SQL execution and `ResultSet` handling.
 
