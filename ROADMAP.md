@@ -33,13 +33,14 @@ Focus on defining the system architecture and requirements.
 - [x] Create `ROADMAP.md`: Project planning and tracking.
 - [x] Create `TECHNICAL_DEBTS.md`: Initialize tracking of technical debts. (2026-05-28)
 
-## Phase 2: Project Infrastructure 🚧
+## Phase 2: Project Infrastructure ✅
 Setup the development environment and CI/CD pipelines.
 
 - [x] Initialize Maven project with `pom.xml`. (2026-05-28)
 - [x] Create `src/install.sh` for build tools. (2026-05-28)
 - [x] Create `test/install.sh` for test tools. (2026-05-28)
 - [x] Setup GitHub Actions CI/CD workflow with compilation & tests. (2026-05-29)
+- [x] Configure Oracle Database integration for CI. (2026-05-29)
 - [x] Configure ReadTheDocs (RTD) for documentation publishing. (2026-05-29)
 
 ## Phase 3: Core Engine Development ✅
@@ -75,6 +76,7 @@ Tie the components together and provide a user-friendly interface.
 Ensure quality and distribute the tool.
 
 - [x] Implement unit and integration tests in `/test/`. (2026-05-29)
+- [x] Implement real Oracle Database integration test. (2026-05-29)
 - [x] Verify use cases (UC1-UC4). (2026-05-29)
 - [x] Generate standalone JAR as a release asset. (2026-05-29)
 - [x] Finalize `README.md` with usage instructions and GitHub Pages link. (2026-05-29)
