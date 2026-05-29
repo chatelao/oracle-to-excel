@@ -122,4 +122,37 @@ public class ExcelExporterTest {
             assertEquals("FF00FF00", color.getARGBHex());
         }
     }
+
+    @Test
+    public void testExportWithMargins() throws Exception {
+        Path outputPath = tempDir.resolve("test_export_margins.xlsx");
+
+        List<String> columnNames = Arrays.asList("ID", "NAME");
+        List<List<Object>> rows = Arrays.asList(
+                Arrays.asList(1, "Alice"),
+                Arrays.asList(2, "Bob")
+        );
+        // marginTop = 2, marginLeft = 3
+        SheetData sheetData = new SheetData("Sheet1", columnNames, rows, null, null, 2, 3);
+
+        ExcelExporter exporter = new ExcelExporter();
+        exporter.export(Arrays.asList(sheetData), outputPath);
+
+        assertTrue(outputPath.toFile().exists());
+
+        try (Workbook workbook = new XSSFWorkbook(new FileInputStream(outputPath.toFile()))) {
+            Sheet sheet = workbook.getSheetAt(0);
+            // Header should be at row 2, col 3
+            Row headerRow = sheet.getRow(2);
+            assertNotNull(headerRow, "Header row at index 2 should not be null");
+            assertEquals("ID", headerRow.getCell(3).getStringCellValue());
+            assertEquals("NAME", headerRow.getCell(4).getStringCellValue());
+
+            // Data should be at row 3, col 3
+            Row dataRow1 = sheet.getRow(3);
+            assertNotNull(dataRow1, "Data row 1 at index 3 should not be null");
+            assertEquals(1.0, dataRow1.getCell(3).getNumericCellValue());
+            assertEquals("Alice", dataRow1.getCell(4).getStringCellValue());
+        }
+    }
 }

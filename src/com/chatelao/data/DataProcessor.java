@@ -78,8 +78,11 @@ public class DataProcessor {
         }
 
         List<SheetData> sheets = new ArrayList<>();
+        int marginTop = sheetConfig.getMarginTop() != null ? sheetConfig.getMarginTop() : 0;
+        int marginLeft = sheetConfig.getMarginLeft() != null ? sheetConfig.getMarginLeft() : 0;
+
         if (!hasRows) {
-            sheets.add(new SheetData(sheetConfig.getName(), targetColumns, new ArrayList<>(), null, sheetConfig.getColumnColors()));
+            sheets.add(new SheetData(sheetConfig.getName(), targetColumns, new ArrayList<>(), null, sheetConfig.getColumnColors(), marginTop, marginLeft));
             return sheets;
         }
 
@@ -102,7 +105,7 @@ public class DataProcessor {
                         int end = Math.min(i + partitionSize, allRows.size());
                         List<List<Object>> partition = allRows.subList(i, end);
                         String name = baseSheetName + "_" + partitionIndex;
-                        SheetData sd = new SheetData(name, targetColumns, new ArrayList<>(partition), null, sheetConfig.getColumnColors());
+                        SheetData sd = new SheetData(name, targetColumns, new ArrayList<>(partition), null, sheetConfig.getColumnColors(), marginTop, marginLeft);
                         if (!filenamePart.isEmpty()) {
                             sd.setTargetFileName(filenamePart);
                         }
@@ -110,7 +113,7 @@ public class DataProcessor {
                         partitionIndex++;
                     }
                 } else {
-                    SheetData sd = new SheetData(baseSheetName, targetColumns, allRows, null, sheetConfig.getColumnColors());
+                    SheetData sd = new SheetData(baseSheetName, targetColumns, allRows, null, sheetConfig.getColumnColors(), marginTop, marginLeft);
                     if (!filenamePart.isEmpty()) {
                         sd.setTargetFileName(filenamePart);
                     }

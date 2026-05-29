@@ -9,21 +9,29 @@ public class SheetData {
     private List<List<Object>> rows;
     private String targetFileName;
     private Map<String, String> columnColors;
+    private int marginTop;
+    private int marginLeft;
 
     public SheetData(String sheetName, List<String> columnNames, List<List<Object>> rows) {
-        this(sheetName, columnNames, rows, null, null);
+        this(sheetName, columnNames, rows, null, null, 0, 0);
     }
 
     public SheetData(String sheetName, List<String> columnNames, List<List<Object>> rows, String targetFileName) {
-        this(sheetName, columnNames, rows, targetFileName, null);
+        this(sheetName, columnNames, rows, targetFileName, null, 0, 0);
     }
 
     public SheetData(String sheetName, List<String> columnNames, List<List<Object>> rows, String targetFileName, Map<String, String> columnColors) {
+        this(sheetName, columnNames, rows, targetFileName, columnColors, 0, 0);
+    }
+
+    public SheetData(String sheetName, List<String> columnNames, List<List<Object>> rows, String targetFileName, Map<String, String> columnColors, int marginTop, int marginLeft) {
         this.sheetName = sheetName;
         this.columnNames = columnNames;
         this.rows = rows;
         this.targetFileName = targetFileName;
         this.columnColors = columnColors;
+        this.marginTop = marginTop;
+        this.marginLeft = marginLeft;
     }
 
     public String getSheetName() {
@@ -52,5 +60,13 @@ public class SheetData {
 
     public void setColumnColors(Map<String, String> columnColors) {
         this.columnColors = columnColors;
+    }
+
+    public int getMarginTop() {
+        return marginTop;
+    }
+
+    public int getMarginLeft() {
+        return marginLeft;
     }
 }
