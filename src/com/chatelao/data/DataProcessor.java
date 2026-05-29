@@ -79,7 +79,9 @@ public class DataProcessor {
 
         List<SheetData> sheets = new ArrayList<>();
         if (!hasRows) {
-            sheets.add(new SheetData(sheetConfig.getName(), targetColumns, new ArrayList<>()));
+            SheetData sd = new SheetData(sheetConfig.getName(), targetColumns, new ArrayList<>());
+            sd.setColumnColors(sheetConfig.getColumnColors());
+            sheets.add(sd);
             return sheets;
         }
 
@@ -103,6 +105,7 @@ public class DataProcessor {
                         List<List<Object>> partition = allRows.subList(i, end);
                         String name = baseSheetName + "_" + partitionIndex;
                         SheetData sd = new SheetData(name, targetColumns, new ArrayList<>(partition));
+                        sd.setColumnColors(sheetConfig.getColumnColors());
                         if (!filenamePart.isEmpty()) {
                             sd.setTargetFileName(filenamePart);
                         }
@@ -111,6 +114,7 @@ public class DataProcessor {
                     }
                 } else {
                     SheetData sd = new SheetData(baseSheetName, targetColumns, allRows);
+                    sd.setColumnColors(sheetConfig.getColumnColors());
                     if (!filenamePart.isEmpty()) {
                         sd.setTargetFileName(filenamePart);
                     }

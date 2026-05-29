@@ -8,7 +8,9 @@ import org.tomlj.TomlTable;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TomlConfigLoader {
 
@@ -63,6 +65,15 @@ public class TomlConfigLoader {
                         TomlArray filenameColumnsArray = sheetTable.getArray("filename_columns");
                         if (filenameColumnsArray != null) {
                             sheetConfig.setFilenameColumns(toStringList(filenameColumnsArray));
+                        }
+
+                        TomlTable columnColorsTable = sheetTable.getTable("column_colors");
+                        if (columnColorsTable != null) {
+                            Map<String, String> columnColors = new HashMap<>();
+                            for (String key : columnColorsTable.keySet()) {
+                                columnColors.put(key, columnColorsTable.getString(key));
+                            }
+                            sheetConfig.setColumnColors(columnColors);
                         }
 
                         sheets.add(sheetConfig);

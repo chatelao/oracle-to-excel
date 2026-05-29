@@ -18,6 +18,7 @@ This manual provides a comprehensive guide on how to use the Oracle to Excel Exp
 6. [Advanced Features](#advanced-features)
     - [Dynamic Naming](#dynamic-naming)
     - [Column Selection and Ordering](#column-selection-and-ordering)
+    - [Column Background Colors](#column-background-colors)
 
 ---
 
@@ -97,6 +98,7 @@ The `[[exports.sheets]]` array (nested under an export) defines the sheets withi
 | `columns` | Array | (Optional) List of columns to include and their order. |
 | `name_columns` | Array | (Optional) Columns used to dynamically name sheets. |
 | `filename_columns` | Array | (Optional) Columns used to dynamically name files. |
+| `column_colors` | Table | (Optional) Map of column names to hex background colors (e.g., `#RRGGBB`). |
 
 ---
 
@@ -196,3 +198,21 @@ filename = "contact_list.xlsx"
   columns = ["LAST_NAME", "FIRST_NAME", "EMAIL"]
 ```
 Only `LAST_NAME`, `FIRST_NAME`, and `EMAIL` will be exported, in that specific order.
+
+### Column Background Colors
+You can define background colors for specific columns using the `column_colors` table. Colors must be provided in hex format (e.g., `#RRGGBB`).
+
+```toml
+[[exports]]
+filename = "styled_report.xlsx"
+  [[exports.sheets]]
+  name = "SalesData"
+  query = "SELECT region, sales, target FROM sales_table"
+
+  # Define background colors for specific columns
+  [exports.sheets.column_colors]
+  REGION = "#E0E0E0"  # Light Grey
+  SALES = "#CCFFCC"   # Light Green
+  TARGET = "#FFFF99"  # Light Yellow
+```
+The background color will be applied to both the header and all data cells in the specified columns.

@@ -29,7 +29,10 @@ public class TomlConfigLoaderTest {
                 "partition_size = 1000\n" +
                 "[[exports.sheets]]\n" +
                 "name = \"Sheet2\"\n" +
-                "query = \"SELECT * FROM table2\"\n";
+                "query = \"SELECT * FROM table2\"\n" +
+                "[exports.sheets.column_colors]\n" +
+                "ID = \"#FF0000\"\n" +
+                "NAME = \"#00FF00\"\n";
 
         Path configPath = tempDir.resolve("config.toml");
         Files.writeString(configPath, tomlContent);
@@ -54,6 +57,9 @@ public class TomlConfigLoaderTest {
         assertEquals(1000, export.getSheets().get(0).getPartitionSize());
         assertEquals("Sheet2", export.getSheets().get(1).getName());
         assertEquals("SELECT * FROM table2", export.getSheets().get(1).getQuery());
+        assertNotNull(export.getSheets().get(1).getColumnColors());
+        assertEquals("#FF0000", export.getSheets().get(1).getColumnColors().get("ID"));
+        assertEquals("#00FF00", export.getSheets().get(1).getColumnColors().get("NAME"));
     }
 
     @Test
