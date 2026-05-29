@@ -16,7 +16,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
@@ -69,7 +71,7 @@ public class Main implements Callable<Integer> {
 
         for (ExportConfig export : config.getExports()) {
             System.out.println("Processing export: " + export.getFilename());
-            List<SheetData> sheets = new ArrayList<>();
+            List<SheetData> allSheetsData = new ArrayList<>();
             if (export.getSheets() == null || export.getSheets().isEmpty()) {
                 System.out.println("  No sheets defined for export: " + export.getFilename());
                 continue;
@@ -82,7 +84,7 @@ public class Main implements Callable<Integer> {
                          ResultSet rs = stmt.executeQuery(sheetConfig.getQuery())) {
 
                         List<SheetData> dataList = dataProcessor.processData(rs, sheetConfig);
-                        sheets.addAll(dataList);
+                        allSheetsData.addAll(dataList);
                     } catch (SQLException e) {
                         System.err.println("  Error executing query for sheet " + sheetConfig.getName() + ": " + e.getMessage());
                         return 1;
@@ -93,12 +95,35 @@ public class Main implements Callable<Integer> {
                 return 1;
             }
 
-            try {
-                exporter.export(sheets, Path.of(export.getFilename()));
-                System.out.println("  Export completed: " + export.getFilename());
-            } catch (IOException e) {
-                System.err.println("  Error exporting to " + export.getFilename() + ": " + e.getMessage());
-                return 1;
+            // Group by target filename
+            Map<String, List<SheetData>> fileGroups = new LinkedHashMap<>();
+            for (SheetData sd : allSheetsData) {
+                String targetFilename = sd.getTargetFileName();
+                if (targetFilename == null || targetFilename.isEmpty()) {
+                    targetFilename = export.getFilename();
+                } else {
+                    // Inject the category into the base filename if it's not just the category
+                    String base = export.getFilename();
+                    int lastDot = base.lastIndexOf('.');
+                    if (lastDot != -1) {
+                        targetFilename = base.substring(0, lastDot) + "_" + targetFilename + base.substring(lastDot);
+                    } else {
+                        targetFilename = base + "_" + targetFilename;
+                    }
+                }
+                fileGroups.computeIfAbsent(targetFilename, k -> new ArrayList<>()).add(sd);
+            }
+
+            for (Map.Entry<String, List<SheetData>> entry : fileGroups.entrySet()) {
+                String filename = entry.getKey();
+                List<SheetData> sheets = entry.getValue();
+                try {
+                    exporter.export(sheets, Path.of(filename));
+                    System.out.println("  Export completed: " + filename);
+                } catch (IOException e) {
+                    System.err.println("  Error exporting to " + filename + ": " + e.getMessage());
+                    return 1;
+                }
             }
         }
 

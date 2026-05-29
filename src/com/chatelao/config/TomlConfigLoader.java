@@ -49,6 +49,22 @@ public class TomlConfigLoader {
                         if (partitionSize != null) {
                             sheetConfig.setPartitionSize(partitionSize.intValue());
                         }
+
+                        TomlArray columnsArray = sheetTable.getArray("columns");
+                        if (columnsArray != null) {
+                            sheetConfig.setColumns(toStringList(columnsArray));
+                        }
+
+                        TomlArray nameColumnsArray = sheetTable.getArray("name_columns");
+                        if (nameColumnsArray != null) {
+                            sheetConfig.setNameColumns(toStringList(nameColumnsArray));
+                        }
+
+                        TomlArray filenameColumnsArray = sheetTable.getArray("filename_columns");
+                        if (filenameColumnsArray != null) {
+                            sheetConfig.setFilenameColumns(toStringList(filenameColumnsArray));
+                        }
+
                         sheets.add(sheetConfig);
                     }
                     exportConfig.setSheets(sheets);
@@ -59,5 +75,13 @@ public class TomlConfigLoader {
         }
 
         return config;
+    }
+
+    private List<String> toStringList(TomlArray array) {
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < array.size(); i++) {
+            list.add(array.getString(i));
+        }
+        return list;
     }
 }
