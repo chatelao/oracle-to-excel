@@ -10,8 +10,8 @@ This roadmap outlines the plan to implement the Oracle to Excel Exporter, as def
 | 2 | Project Infrastructure | 🚧 |
 | 3 | Core Engine Development | ✅ |
 | 4 | Data & Export Logic | 🚧 |
-| 5 | CLI & Integration | ⏳ |
-| 6 | Validation & Release | ⏳ |
+| 5 | CLI & Integration | ✅ |
+| 6 | Validation & Release | 🚧 |
 
 ## Goals
 
@@ -33,7 +33,7 @@ Focus on defining the system architecture and requirements.
 - [x] Create `ROADMAP.md`: Project planning and tracking.
 - [x] Create `TECHNICAL_DEBTS.md`: Initialize tracking of technical debts. (2026-05-28)
 
-## Phase 2: Project Infrastructure
+## Phase 2: Project Infrastructure 🚧
 Setup the development environment and CI/CD pipelines.
 
 - [x] Initialize Maven project with `pom.xml`. (2026-05-28)
@@ -63,18 +63,18 @@ Implement the logic for data transformation and Excel generation.
   - [x] Implement Workbook/Sheet creation using Apache POI. (2026-05-30)
   - [x] Implement data writing and file saving logic. (2026-05-30)
 
-## Phase 5: CLI & Integration
+## Phase 5: CLI & Integration ✅
 Tie the components together and provide a user-friendly interface.
 
-- [ ] **CLI Orchestrator**
-  - [ ] Implement command-line argument parsing with `picocli`.
-  - [ ] Coordinate data flow between components.
-  - [ ] Support both CLI options and TOML configuration files.
+- [x] **CLI Orchestrator** (2026-05-29)
+  - [x] Implement command-line argument parsing with `picocli`. (2026-05-29)
+  - [x] Coordinate data flow between components. (2026-05-29)
+  - [x] Support both CLI options and TOML configuration files. (2026-05-29)
 
-## Phase 6: Validation & Release
+## Phase 6: Validation & Release 🚧
 Ensure quality and distribute the tool.
 
-- [ ] Implement unit and integration tests in `/test/`.
+- [x] Implement unit and integration tests in `/test/`. (2026-05-29)
 - [ ] Verify use cases (UC1-UC4).
 - [ ] Generate standalone JAR as a release asset.
 - [ ] Finalize `README.md` with usage instructions and GitHub Pages link.
