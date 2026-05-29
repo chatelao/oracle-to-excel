@@ -104,6 +104,8 @@ public class ExcelExporter {
                 // Auto-fit columns
                 for (int i = 0; i < columnNames.size(); i++) {
                     sheet.autoSizeColumn(i);
+                    // Add extra width for the filter arrow
+                    sheet.setColumnWidth(i, sheet.getColumnWidth(i) + 1000);
                 }
             }
 
