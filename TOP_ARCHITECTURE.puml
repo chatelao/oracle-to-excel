@@ -1,4 +1,5 @@
 @startuml
+
 title Top-Level Architecture - Oracle to Excel Exporter
 
 package "Oracle to Excel Exporter" {
@@ -7,22 +8,23 @@ package "Oracle to Excel Exporter" {
     [Oracle Query Engine] as QueryEngine
     [Data Processing Layer] as DataProc
     [Excel Export Engine] as ExcelEngine
+
+    database "Oracle DB" as DB
 }
 
-database "Oracle DB" as DB
-file "Config File (TOML)" as ConfigFile
+file "Config File (TOML)" as TOML
 file "Excel File (.xlsx)" as ExcelFile
 
-CLI -> ConfigMgr : 1. Load configuration
-ConfigFile -> ConfigMgr : reads
-ConfigMgr -> CLI : configuration data
+ConfigMgr  <- CLI   : 1. Load configuration
+TOML  --> ConfigMgr : reads
+ConfigMgr  --> CLI  : configuration data
 
 CLI -> QueryEngine : 2. Execute SQL
 QueryEngine --> DB : SQL queries
-DB -> QueryEngine : result sets
+DB -> QueryEngine  : result sets
 
-QueryEngine -> DataProc : 3. Pass raw data
-DataProc -> ExcelEngine : 4. Map to Excel structure
-ExcelEngine -> ExcelFile : 5. Generate Excel file
+QueryEngine  -> DataProc    : 3. Pass raw data
+DataProc    --> ExcelEngine : 4. Map to Excel structure
+ExcelEngine --> ExcelFile   : 5. Generate Excel file
 
 @enduml
