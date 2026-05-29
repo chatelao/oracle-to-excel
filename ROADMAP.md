@@ -80,6 +80,7 @@ Ensure quality and distribute the tool.
 - [x] Implement real Oracle Database integration test. (2026-05-29)
 - [x] Verify use cases (UC1-UC4). (2026-05-29)
 - [x] Generate standalone JAR as a release asset. (2026-05-29)
+- [x] Automate CLI .jar asset attachment to GitHub Releases. (2026-05-30)
 - [x] Finalize `README.md` with usage instructions and GitHub Pages link. (2026-05-29)
 
 ## Phase 7: Advanced Mapping & Splitting ✅
