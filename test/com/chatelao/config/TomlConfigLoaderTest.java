@@ -57,6 +57,29 @@ public class TomlConfigLoaderTest {
     }
 
     @Test
+    public void testLoadConfigWithColumnColors() throws IOException {
+        String tomlContent = "[[exports]]\n" +
+                "filename = \"report.xlsx\"\n" +
+                "[[exports.sheets]]\n" +
+                "name = \"Sheet1\"\n" +
+                "query = \"SELECT * FROM table1\"\n" +
+                "[exports.sheets.column_colors]\n" +
+                "ID = \"#FF0000\"\n" +
+                "NAME = \"#00FF00\"\n";
+
+        Path configPath = tempDir.resolve("config_colors.toml");
+        Files.writeString(configPath, tomlContent);
+
+        TomlConfigLoader loader = new TomlConfigLoader();
+        Config config = loader.loadConfig(configPath);
+
+        SheetConfig sheet = config.getExports().get(0).getSheets().get(0);
+        assertNotNull(sheet.getColumnColors());
+        assertEquals("#FF0000", sheet.getColumnColors().get("ID"));
+        assertEquals("#00FF00", sheet.getColumnColors().get("NAME"));
+    }
+
+    @Test
     public void testLoadNonExistentFile() {
         TomlConfigLoader loader = new TomlConfigLoader();
         Path nonExistentPath = tempDir.resolve("non_existent.toml");

@@ -1,10 +1,8 @@
 package com.chatelao.export;
 
 import com.chatelao.model.SheetData;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
@@ -13,10 +11,11 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.FileInputStream;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ExcelExporterTest {
 
@@ -56,6 +55,68 @@ public class ExcelExporterTest {
 
             assertEquals(1.0, sheet.getRow(1).getCell(0).getNumericCellValue());
             assertEquals("Alice", sheet.getRow(1).getCell(1).getStringCellValue());
+        }
+    }
+
+    @Test
+    public void testExportWithColors() throws Exception {
+        Path outputPath = tempDir.resolve("test_export_colors.xlsx");
+
+        List<String> columnNames = Arrays.asList("ID", "NAME");
+        List<List<Object>> rows = Arrays.asList(
+                Arrays.asList(1, "Alice")
+        );
+        Map<String, String> columnColors = new HashMap<>();
+        columnColors.put("ID", "#FF0000"); // Red
+
+        SheetData sheetData = new SheetData("Sheet1", columnNames, rows, null, columnColors);
+
+        ExcelExporter exporter = new ExcelExporter();
+        exporter.export(Arrays.asList(sheetData), outputPath);
+
+        assertTrue(outputPath.toFile().exists());
+
+        try (Workbook workbook = new XSSFWorkbook(new FileInputStream(outputPath.toFile()))) {
+            Sheet sheet = workbook.getSheetAt(0);
+            Cell cell = sheet.getRow(1).getCell(0); // ID column
+
+            CellStyle style = cell.getCellStyle();
+            assertEquals(FillPatternType.SOLID_FOREGROUND, style.getFillPattern());
+
+            XSSFColor color = (XSSFColor) style.getFillForegroundColorColor();
+            assertNotNull(color);
+            assertEquals("FFFF0000", color.getARGBHex());
+        }
+    }
+
+    @Test
+    public void testExportWithColorsCaseInsensitive() throws Exception {
+        Path outputPath = tempDir.resolve("test_export_colors_case.xlsx");
+
+        List<String> columnNames = Arrays.asList("id", "name");
+        List<List<Object>> rows = Arrays.asList(
+                Arrays.asList(1, "Alice")
+        );
+        Map<String, String> columnColors = new HashMap<>();
+        columnColors.put("ID", "#00FF00"); // Green
+
+        SheetData sheetData = new SheetData("Sheet1", columnNames, rows, null, columnColors);
+
+        ExcelExporter exporter = new ExcelExporter();
+        exporter.export(Arrays.asList(sheetData), outputPath);
+
+        assertTrue(outputPath.toFile().exists());
+
+        try (Workbook workbook = new XSSFWorkbook(new FileInputStream(outputPath.toFile()))) {
+            Sheet sheet = workbook.getSheetAt(0);
+            Cell cell = sheet.getRow(1).getCell(0); // id column
+
+            CellStyle style = cell.getCellStyle();
+            assertEquals(FillPatternType.SOLID_FOREGROUND, style.getFillPattern());
+
+            XSSFColor color = (XSSFColor) style.getFillForegroundColorColor();
+            assertNotNull(color);
+            assertEquals("FF00FF00", color.getARGBHex());
         }
     }
 }
