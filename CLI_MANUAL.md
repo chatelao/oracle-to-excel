@@ -105,7 +105,7 @@ The `[[exports.sheets]]` array (nested under an export) defines the sheets withi
 | `query` | String | The SQL query to execute. |
 | `partition_size` | Integer | (Optional) Max rows per sheet. Splits into `name_1`, `name_2`, etc. |
 | `columns` | Array | (Optional) List of columns to include and their order. |
-| `name_columns` | Array | (Optional) Columns used to dynamically name sheets. |
+| `sheetname_columns` | Array | (Optional) Columns used to dynamically name sheets. |
 | `filename_columns` | Array | (Optional) Columns used to dynamically name files. |
 | `column_colors` | Table | (Optional) Map of column names to hex background colors (e.g., `#RRGGBB`). |
 
@@ -178,7 +178,7 @@ filename = "sales_by_region.xlsx"
   name = "Sales"
   query = "SELECT * FROM sales"
   # Column(s) whose values will be appended to the sheet name
-  name_columns = ["REGION"]
+  sheetname_columns = ["REGION"]
 ```
 If `REGION` has values 'North' and 'South', you will get sheets `Sales_North` and `Sales_South`.
 

@@ -41,7 +41,7 @@ public class DataProcessor {
         }
 
         // Determine indices for category-based splitting
-        List<String> nameColumns = sheetConfig.getNameColumns();
+        List<String> nameColumns = sheetConfig.getSheetnameColumns();
         List<Integer> nameIndices = new ArrayList<>();
         if (nameColumns != null) {
             for (String col : nameColumns) {

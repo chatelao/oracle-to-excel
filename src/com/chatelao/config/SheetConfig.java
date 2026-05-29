@@ -8,7 +8,7 @@ public class SheetConfig {
     private String query;
     private Integer partitionSize;
     private List<String> columns;
-    private List<String> nameColumns;
+    private List<String> sheetnameColumns;
     private List<String> filenameColumns;
     private Map<String, String> columnColors;
 
@@ -44,12 +44,12 @@ public class SheetConfig {
         this.columns = columns;
     }
 
-    public List<String> getNameColumns() {
-        return nameColumns;
+    public List<String> getSheetnameColumns() {
+        return sheetnameColumns;
     }
 
-    public void setNameColumns(List<String> nameColumns) {
-        this.nameColumns = nameColumns;
+    public void setSheetnameColumns(List<String> sheetnameColumns) {
+        this.sheetnameColumns = sheetnameColumns;
     }
 
     public List<String> getFilenameColumns() {
