@@ -57,6 +57,27 @@ public class TomlConfigLoaderTest {
     }
 
     @Test
+    public void testLoadConfigWithOffsets() throws IOException {
+        String tomlContent = "[[exports]]\n" +
+                "filename = \"report.xlsx\"\n" +
+                "[[exports.sheets]]\n" +
+                "name = \"Sheet1\"\n" +
+                "query = \"SELECT * FROM table1\"\n" +
+                "top_offset = 5\n" +
+                "left_offset = 2\n";
+
+        Path configPath = tempDir.resolve("config_offsets.toml");
+        Files.writeString(configPath, tomlContent);
+
+        TomlConfigLoader loader = new TomlConfigLoader();
+        Config config = loader.loadConfig(configPath);
+
+        SheetConfig sheet = config.getExports().get(0).getSheets().get(0);
+        assertEquals(5, sheet.getTopOffset());
+        assertEquals(2, sheet.getLeftOffset());
+    }
+
+    @Test
     public void testLoadConfigWithColumnColors() throws IOException {
         String tomlContent = "[[exports]]\n" +
                 "filename = \"report.xlsx\"\n" +
