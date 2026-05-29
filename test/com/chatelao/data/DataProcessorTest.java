@@ -121,7 +121,7 @@ public class DataProcessorTest {
                     SheetConfig config = new SheetConfig();
                     config.setName("SplitSheet");
                     config.setFilenameColumns(Arrays.asList("CATEGORY"));
-                    config.setNameColumns(Arrays.asList("SUBCAT"));
+                    config.setSheetnameColumns(Arrays.asList("SUBCAT"));
 
                     List<SheetData> sheets = processor.processData(rs, config);
 

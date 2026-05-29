@@ -55,9 +55,9 @@ public class TomlConfigLoader {
                             sheetConfig.setColumns(toStringList(columnsArray));
                         }
 
-                        TomlArray nameColumnsArray = sheetTable.getArray("name_columns");
+                        TomlArray nameColumnsArray = sheetTable.getArray("sheetname_columns");
                         if (nameColumnsArray != null) {
-                            sheetConfig.setNameColumns(toStringList(nameColumnsArray));
+                            sheetConfig.setSheetnameColumns(toStringList(nameColumnsArray));
                         }
 
                         TomlArray filenameColumnsArray = sheetTable.getArray("filename_columns");

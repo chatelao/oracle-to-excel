@@ -108,7 +108,7 @@ public class MainIntegrationTest {
                     "[[exports]]\n" +
                     "filename = \"" + baseExportPath.toString().replace("\\", "\\\\") + "\"\n" +
                     "sheets = [\n" +
-                    "    { name = \"Data\", query = \"SELECT * FROM map_test\", columns = [\"NAME\", \"ID\"], filename_columns = [\"COUNTRY\"], name_columns = [\"REGION\"] }\n" +
+                    "    { name = \"Data\", query = \"SELECT * FROM map_test\", columns = [\"NAME\", \"ID\"], filename_columns = [\"COUNTRY\"], sheetname_columns = [\"REGION\"] }\n" +
                     "]\n";
             Files.writeString(configPath, configContent);
 

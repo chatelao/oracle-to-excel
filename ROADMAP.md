@@ -87,6 +87,6 @@ Ensure quality and distribute the tool.
 Support configurable column selection and category-based splitting.
 
 - [x] Support column selection and ordering via `columns` configuration. (2026-05-29)
-- [x] Implement dynamic sheet naming via `name_columns`. (2026-05-29)
+- [x] Implement dynamic sheet naming via `sheetname_columns`. (2026-05-29)
 - [x] Implement dynamic file naming via `filename_columns`. (2026-05-29)
 - [x] Integrate splitting with row-based partitioning. (2026-05-29)
