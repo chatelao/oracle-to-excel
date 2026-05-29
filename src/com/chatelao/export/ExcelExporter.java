@@ -27,20 +27,27 @@ public class ExcelExporter {
     public void export(List<SheetData> sheetDataList, Path outputPath) throws IOException {
         try (Workbook workbook = new XSSFWorkbook()) {
             for (SheetData sheetData : sheetDataList) {
-                Sheet sheet = workbook.createSheet(sheetData.getSheetName());
+                Sheet sheet = workbook.getSheet(sheetData.getSheetName());
+                int startRow;
 
-                // Create header row
-                Row headerRow = sheet.createRow(0);
-                List<String> columnNames = sheetData.getColumnNames();
-                for (int i = 0; i < columnNames.size(); i++) {
-                    Cell cell = headerRow.createCell(i);
-                    cell.setCellValue(columnNames.get(i));
+                if (sheet == null) {
+                    sheet = workbook.createSheet(sheetData.getSheetName());
+                    // Create header row
+                    Row headerRow = sheet.createRow(0);
+                    List<String> columnNames = sheetData.getColumnNames();
+                    for (int i = 0; i < columnNames.size(); i++) {
+                        Cell cell = headerRow.createCell(i);
+                        cell.setCellValue(columnNames.get(i));
+                    }
+                    startRow = 1;
+                } else {
+                    startRow = sheet.getLastRowNum() + 1;
                 }
 
                 // Create data rows
                 List<List<Object>> rows = sheetData.getRows();
                 for (int i = 0; i < rows.size(); i++) {
-                    Row row = sheet.createRow(i + 1);
+                    Row row = sheet.createRow(startRow + i);
                     List<Object> rowData = rows.get(i);
                     for (int j = 0; j < rowData.size(); j++) {
                         Cell cell = row.createCell(j);

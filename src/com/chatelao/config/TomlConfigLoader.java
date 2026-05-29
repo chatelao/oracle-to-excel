@@ -49,6 +49,8 @@ public class TomlConfigLoader {
                         if (partitionSize != null) {
                             sheetConfig.setPartitionSize(partitionSize.intValue());
                         }
+                        sheetConfig.setSheetNameColumn(sheetTable.getString("sheet_name_column"));
+                        sheetConfig.setFileNameColumn(sheetTable.getString("file_name_column"));
                         sheets.add(sheetConfig);
                     }
                     exportConfig.setSheets(sheets);

@@ -67,37 +67,50 @@ public class Main implements Callable<Integer> {
             return 0;
         }
 
-        for (ExportConfig export : config.getExports()) {
-            System.out.println("Processing export: " + export.getFilename());
-            List<SheetData> sheets = new ArrayList<>();
-            if (export.getSheets() == null || export.getSheets().isEmpty()) {
-                System.out.println("  No sheets defined for export: " + export.getFilename());
-                continue;
-            }
+        java.util.Map<String, List<SheetData>> fileGroups = new java.util.LinkedHashMap<>();
 
-            try (Connection conn = DriverManager.getConnection(dbConfig.getUrl(), props)) {
+        try (Connection conn = DriverManager.getConnection(dbConfig.getUrl(), props)) {
+            for (ExportConfig export : config.getExports()) {
+                if (export.getSheets() == null || export.getSheets().isEmpty()) {
+                    continue;
+                }
+
                 for (SheetConfig sheetConfig : export.getSheets()) {
-                    System.out.println("  Executing query for sheet: " + sheetConfig.getName());
+                    System.out.println("Executing query for: " + (sheetConfig.getName() != null ? sheetConfig.getName() : "unnamed sheet"));
                     try (Statement stmt = conn.createStatement();
                          ResultSet rs = stmt.executeQuery(sheetConfig.getQuery())) {
 
                         List<SheetData> dataList = dataProcessor.processData(rs, sheetConfig);
-                        sheets.addAll(dataList);
+                        for (SheetData sd : dataList) {
+                            String targetFile = sd.getTargetFileName();
+                            if (targetFile == null) {
+                                targetFile = export.getFilename();
+                            }
+                            if (targetFile == null) {
+                                System.err.println("No target filename specified for sheet: " + sd.getSheetName());
+                                return 1;
+                            }
+                            fileGroups.computeIfAbsent(targetFile, k -> new ArrayList<>()).add(sd);
+                        }
                     } catch (SQLException e) {
-                        System.err.println("  Error executing query for sheet " + sheetConfig.getName() + ": " + e.getMessage());
+                        System.err.println("Error executing query for sheet " + sheetConfig.getName() + ": " + e.getMessage());
                         return 1;
                     }
                 }
-            } catch (SQLException e) {
-                System.err.println("  Database connection error: " + e.getMessage());
-                return 1;
             }
+        } catch (SQLException e) {
+            System.err.println("Database connection error: " + e.getMessage());
+            return 1;
+        }
 
+        for (java.util.Map.Entry<String, List<SheetData>> entry : fileGroups.entrySet()) {
+            String filename = entry.getKey();
+            List<SheetData> sheets = entry.getValue();
+            System.out.println("Exporting to: " + filename);
             try {
-                exporter.export(sheets, Path.of(export.getFilename()));
-                System.out.println("  Export completed: " + export.getFilename());
+                exporter.export(sheets, Path.of(filename));
             } catch (IOException e) {
-                System.err.println("  Error exporting to " + export.getFilename() + ": " + e.getMessage());
+                System.err.println("Error exporting to " + filename + ": " + e.getMessage());
                 return 1;
             }
         }

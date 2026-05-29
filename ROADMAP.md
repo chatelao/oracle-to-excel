@@ -17,9 +17,9 @@ This roadmap outlines the plan to implement the Oracle to Excel Exporter, as def
 
 - **UC1: Simple Export**: Download one query into one sheet and/or file ✅
 - **UC2: Data Split**: Download one query into multiple sheets and/or file ✅
-- **UC3: Consolidated Report**: Download multiple queries into one sheet and/or file ⏳
-- **UC4: Complex Batch Export**: Download multiple queries into multiple sheets and/or files ⏳
-- **Automated CLI Tool**: Standalone JAR for easy distribution ⏳
+- **UC3: Consolidated Report**: Download multiple queries into one sheet and/or file ✅
+- **UC4: Complex Batch Export**: Download multiple queries into multiple sheets and/or files ✅
+- **Automated CLI Tool**: Standalone JAR for easy distribution ✅
 
 ---
 
@@ -78,5 +78,6 @@ Ensure quality and distribute the tool.
 - [x] Implement unit and integration tests in `/test/`. (2026-05-29)
 - [x] Implement real Oracle Database integration test. (2026-05-29)
 - [x] Verify use cases (UC1-UC4). (2026-05-29)
+- [x] Support dynamic file and sheet naming from query results. (2026-05-29)
 - [x] Generate standalone JAR as a release asset. (2026-05-29)
 - [x] Finalize `README.md` with usage instructions and GitHub Pages link. (2026-05-29)

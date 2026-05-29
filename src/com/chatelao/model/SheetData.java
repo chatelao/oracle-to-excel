@@ -4,6 +4,7 @@ import java.util.List;
 
 public class SheetData {
     private String sheetName;
+    private String targetFileName;
     private List<String> columnNames;
     private List<List<Object>> rows;
 
@@ -23,5 +24,13 @@ public class SheetData {
 
     public List<List<Object>> getRows() {
         return rows;
+    }
+
+    public String getTargetFileName() {
+        return targetFileName;
+    }
+
+    public void setTargetFileName(String targetFileName) {
+        this.targetFileName = targetFileName;
     }
 }
