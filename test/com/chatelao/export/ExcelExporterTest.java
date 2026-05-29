@@ -28,7 +28,7 @@ public class ExcelExporterTest {
 
         List<String> columnNames = Arrays.asList("ID", "NAME");
         List<List<Object>> rows = Arrays.asList(
-                Arrays.asList(1, "Alice"),
+                Arrays.asList(1, "Alice with a very long name that should trigger auto-fit"),
                 Arrays.asList(2, "Bob")
         );
         SheetData sheetData = new SheetData("Sheet1", columnNames, rows);
@@ -54,7 +54,10 @@ public class ExcelExporterTest {
             assertTrue(((XSSFSheet)sheet).getCTWorksheet().isSetAutoFilter(), "Auto filter should be enabled");
 
             assertEquals(1.0, sheet.getRow(1).getCell(0).getNumericCellValue());
-            assertEquals("Alice", sheet.getRow(1).getCell(1).getStringCellValue());
+            assertEquals("Alice with a very long name that should trigger auto-fit", sheet.getRow(1).getCell(1).getStringCellValue());
+
+            // Verify auto-fit: column 1 should be wider than column 0
+            assertTrue(sheet.getColumnWidth(1) > sheet.getColumnWidth(0), "Column 1 should be wider than column 0 due to auto-fit");
         }
     }
 
