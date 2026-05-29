@@ -51,6 +51,7 @@ java -jar target/oracle-to-excel-0.1.0-SNAPSHOT.jar --config path/to/config.toml
 | Argument | Short | Description | Required |
 | --- | --- | --- | --- |
 | `--config` | `-c` | Path to the TOML configuration file. | Yes |
+| `--audit-sheet` | | Name of the sheet to write audit information to. | No |
 | `--help` | `-h` | Show help message and exit. | No |
 | `--version` | `-V` | Print version information and exit. | No |
 
@@ -75,6 +76,15 @@ url = "jdbc:oracle:thin:@//localhost:1521/FREEPDB1"
 username = "system"
 # Password for the database user (stored in plain text; ensure file permissions are restricted)
 password = "password"
+
+### Audit Configuration
+The `[audit]` section defines global audit settings.
+
+```toml
+[audit]
+# The name of the sheet where query execution details will be recorded.
+# If specified, this sheet will be added to every exported Excel file.
+sheet = "Execution_Audit"
 ```
 
 ### Export Configuration

@@ -5,6 +5,7 @@ import java.util.List;
 public class Config {
     private DatabaseConfig database;
     private List<ExportConfig> exports;
+    private String auditSheetName;
 
     public DatabaseConfig getDatabase() {
         return database;
@@ -20,5 +21,13 @@ public class Config {
 
     public void setExports(List<ExportConfig> exports) {
         this.exports = exports;
+    }
+
+    public String getAuditSheetName() {
+        return auditSheetName;
+    }
+
+    public void setAuditSheetName(String auditSheetName) {
+        this.auditSheetName = auditSheetName;
     }
 }
