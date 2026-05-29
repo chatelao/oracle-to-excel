@@ -81,6 +81,11 @@ public class TomlConfigLoader {
                             sheetConfig.setColumnColors(columnColors);
                         }
 
+                        Boolean pivotTable = sheetTable.getBoolean("pivot_table");
+                        if (pivotTable != null) {
+                            sheetConfig.setPivotTable(pivotTable);
+                        }
+
                         sheets.add(sheetConfig);
                     }
                     exportConfig.setSheets(sheets);

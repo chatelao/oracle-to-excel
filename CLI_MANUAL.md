@@ -108,6 +108,7 @@ The `[[exports.sheets]]` array (nested under an export) defines the sheets withi
 | `sheetname_columns` | Array | (Optional) Columns used to dynamically name sheets. |
 | `filename_columns` | Array | (Optional) Columns used to dynamically name files. |
 | `column_colors` | Table | (Optional) Map of column names to hex background colors (e.g., `#RRGGBB`). |
+| `pivot_table` | Boolean | (Optional) If `true`, generates a pivot table on a separate sheet using the data as source. |
 
 ---
 
@@ -222,4 +223,17 @@ filename = "financial_report.xlsx"
   REVENUE = "#ADD8E6"
   # Highlight the TOTAL column in light green
   TOTAL = "#90EE90"
+
+### Pivot Tables
+You can automatically generate a pivot table for any exported sheet.
+
+```toml
+[[exports]]
+filename = "sales_summary.xlsx"
+  [[exports.sheets]]
+  name = "SalesData"
+  query = "SELECT region, product, amount FROM sales"
+  # Enable automatic pivot table generation
+  pivot_table = true
 ```
+This will create a `SalesData` sheet and a `Pivot_SalesData` sheet. The pivot table will use the first column as a row label and the last column as a sum value by default.

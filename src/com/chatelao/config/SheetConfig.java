@@ -11,6 +11,7 @@ public class SheetConfig {
     private List<String> sheetnameColumns;
     private List<String> filenameColumns;
     private Map<String, String> columnColors;
+    private boolean pivotTable;
 
     public String getName() {
         return name;
@@ -66,5 +67,13 @@ public class SheetConfig {
 
     public void setColumnColors(Map<String, String> columnColors) {
         this.columnColors = columnColors;
+    }
+
+    public boolean isPivotTable() {
+        return pivotTable;
+    }
+
+    public void setPivotTable(boolean pivotTable) {
+        this.pivotTable = pivotTable;
     }
 }

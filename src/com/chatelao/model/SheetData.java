@@ -9,21 +9,27 @@ public class SheetData {
     private List<List<Object>> rows;
     private String targetFileName;
     private Map<String, String> columnColors;
+    private boolean pivotTable;
 
     public SheetData(String sheetName, List<String> columnNames, List<List<Object>> rows) {
-        this(sheetName, columnNames, rows, null, null);
+        this(sheetName, columnNames, rows, null, null, false);
     }
 
     public SheetData(String sheetName, List<String> columnNames, List<List<Object>> rows, String targetFileName) {
-        this(sheetName, columnNames, rows, targetFileName, null);
+        this(sheetName, columnNames, rows, targetFileName, null, false);
     }
 
     public SheetData(String sheetName, List<String> columnNames, List<List<Object>> rows, String targetFileName, Map<String, String> columnColors) {
+        this(sheetName, columnNames, rows, targetFileName, columnColors, false);
+    }
+
+    public SheetData(String sheetName, List<String> columnNames, List<List<Object>> rows, String targetFileName, Map<String, String> columnColors, boolean pivotTable) {
         this.sheetName = sheetName;
         this.columnNames = columnNames;
         this.rows = rows;
         this.targetFileName = targetFileName;
         this.columnColors = columnColors;
+        this.pivotTable = pivotTable;
     }
 
     public String getSheetName() {
@@ -52,5 +58,13 @@ public class SheetData {
 
     public void setColumnColors(Map<String, String> columnColors) {
         this.columnColors = columnColors;
+    }
+
+    public boolean isPivotTable() {
+        return pivotTable;
+    }
+
+    public void setPivotTable(boolean pivotTable) {
+        this.pivotTable = pivotTable;
     }
 }

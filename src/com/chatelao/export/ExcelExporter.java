@@ -2,9 +2,13 @@ package com.chatelao.export;
 
 import com.chatelao.model.SheetData;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
+import org.apache.poi.xssf.usermodel.XSSFPivotTable;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileOutputStream;
@@ -106,6 +110,35 @@ public class ExcelExporter {
                     sheet.autoSizeColumn(i);
                     // Add extra width for the filter arrow
                     sheet.setColumnWidth(i, sheet.getColumnWidth(i) + 1000);
+                }
+
+                // Create pivot table if requested
+                if (sheetData.isPivotTable() && !rows.isEmpty()) {
+                    String pivotSheetName = "Pivot_" + sheetData.getSheetName();
+                    // Excel sheet name limit is 31 chars
+                    if (pivotSheetName.length() > 31) {
+                        pivotSheetName = pivotSheetName.substring(0, 31);
+                    }
+                    XSSFSheet pivotSheet = (XSSFSheet) workbook.createSheet(pivotSheetName);
+
+                    int lastRow = rows.size();
+                    int lastCol = columnNames.size() - 1;
+
+                    String sourceRef = "'" + sheetData.getSheetName() + "'!A1:" +
+                                     new CellReference(lastRow, lastCol).formatAsString();
+
+                    AreaReference source = new AreaReference(sourceRef, workbook.getSpreadsheetVersion());
+                    CellReference position = new CellReference("A1");
+
+                    XSSFPivotTable pivotTable = pivotSheet.createPivotTable(source, position);
+                    // By default, add the first column as a row label
+                    if (lastCol >= 0) {
+                        pivotTable.addRowLabel(0);
+                    }
+                    // And the last column as a sum if there are at least two columns
+                    if (lastCol >= 1) {
+                        pivotTable.addColumnLabel(DataConsolidateFunction.SUM, lastCol);
+                    }
                 }
             }
 
