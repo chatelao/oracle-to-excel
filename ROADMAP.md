@@ -47,11 +47,11 @@ Define interfaces and implement database connectivity and configuration parsing.
 
 - [ ] **Configuration Manager**
   - [x] Define `Config` internal models. (2026-05-29)
-  - [ ] Implement TOML parsing using `tomlj`.
+  - [x] Implement TOML parsing using `tomlj`. (2026-05-30)
 - [ ] **Oracle Query Engine**
   - [x] Define `QueryEngine` interface. (2026-05-29)
-  - [ ] Implement JDBC connection management.
-  - [ ] Implement SQL execution and `ResultSet` handling.
+  - [x] Implement JDBC connection management. (2026-05-30)
+  - [x] Implement SQL execution and `ResultSet` handling. (2026-05-30)
 
 ## Phase 4: Data & Export Logic
 Implement the logic for data transformation and Excel generation.
