@@ -1,6 +1,7 @@
 package com.chatelao.config;
 
 import java.util.List;
+import java.util.Map;
 
 public class SheetConfig {
     private String name;
@@ -9,6 +10,7 @@ public class SheetConfig {
     private List<String> columns;
     private List<String> nameColumns;
     private List<String> filenameColumns;
+    private Map<String, String> columnColors;
 
     public String getName() {
         return name;
@@ -56,5 +58,13 @@ public class SheetConfig {
 
     public void setFilenameColumns(List<String> filenameColumns) {
         this.filenameColumns = filenameColumns;
+    }
+
+    public Map<String, String> getColumnColors() {
+        return columnColors;
+    }
+
+    public void setColumnColors(Map<String, String> columnColors) {
+        this.columnColors = columnColors;
     }
 }

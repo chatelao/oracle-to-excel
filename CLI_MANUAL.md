@@ -107,6 +107,7 @@ The `[[exports.sheets]]` array (nested under an export) defines the sheets withi
 | `columns` | Array | (Optional) List of columns to include and their order. |
 | `name_columns` | Array | (Optional) Columns used to dynamically name sheets. |
 | `filename_columns` | Array | (Optional) Columns used to dynamically name files. |
+| `column_colors` | Table | (Optional) Map of column names to hex background colors (e.g., `#RRGGBB`). |
 
 ---
 
@@ -206,3 +207,19 @@ filename = "contact_list.xlsx"
   columns = ["LAST_NAME", "FIRST_NAME", "EMAIL"]
 ```
 Only `LAST_NAME`, `FIRST_NAME`, and `EMAIL` will be exported, in that specific order.
+
+### Column Background Colors
+You can highlight specific columns by defining background colors in the `column_colors` table. Colors are specified as hex codes.
+
+```toml
+[[exports]]
+filename = "financial_report.xlsx"
+  [[exports.sheets]]
+  name = "Revenue"
+  query = "SELECT region, revenue, tax, total FROM sales"
+  [exports.sheets.column_colors]
+  # Highlight the REVENUE column in light blue
+  REVENUE = "#ADD8E6"
+  # Highlight the TOTAL column in light green
+  TOTAL = "#90EE90"
+```
