@@ -1,7 +1,11 @@
 package com.chatelao.export;
 
 import com.chatelao.model.SheetData;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -37,10 +41,21 @@ public class ExcelExporterTest {
 
         try (Workbook workbook = new XSSFWorkbook(new FileInputStream(outputPath.toFile()))) {
             assertEquals(1, workbook.getNumberOfSheets());
-            assertEquals("Sheet1", workbook.getSheetName(0));
-            assertEquals("ID", workbook.getSheetAt(0).getRow(0).getCell(0).getStringCellValue());
-            assertEquals(1.0, workbook.getSheetAt(0).getRow(1).getCell(0).getNumericCellValue());
-            assertEquals("Alice", workbook.getSheetAt(0).getRow(1).getCell(1).getStringCellValue());
+            Sheet sheet = workbook.getSheetAt(0);
+            assertEquals("Sheet1", sheet.getSheetName());
+
+            // Verify header bold
+            Cell headerCell = sheet.getRow(0).getCell(0);
+            assertEquals("ID", headerCell.getStringCellValue());
+            int fontIndex = headerCell.getCellStyle().getFontIndex();
+            Font font = workbook.getFontAt(fontIndex);
+            assertTrue(font.getBold(), "Header font should be bold");
+
+            // Verify auto filter
+            assertTrue(((XSSFSheet)sheet).getCTWorksheet().isSetAutoFilter(), "Auto filter should be enabled");
+
+            assertEquals(1.0, sheet.getRow(1).getCell(0).getNumericCellValue());
+            assertEquals("Alice", sheet.getRow(1).getCell(1).getStringCellValue());
         }
     }
 }

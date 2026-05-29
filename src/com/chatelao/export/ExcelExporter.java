@@ -1,10 +1,8 @@
 package com.chatelao.export;
 
 import com.chatelao.model.SheetData;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileOutputStream;
@@ -26,6 +24,11 @@ public class ExcelExporter {
      */
     public void export(List<SheetData> sheetDataList, Path outputPath) throws IOException {
         try (Workbook workbook = new XSSFWorkbook()) {
+            CellStyle headerStyle = workbook.createCellStyle();
+            Font headerFont = workbook.createFont();
+            headerFont.setBold(true);
+            headerStyle.setFont(headerFont);
+
             for (SheetData sheetData : sheetDataList) {
                 Sheet sheet = workbook.createSheet(sheetData.getSheetName());
 
@@ -35,6 +38,7 @@ public class ExcelExporter {
                 for (int i = 0; i < columnNames.size(); i++) {
                     Cell cell = headerRow.createCell(i);
                     cell.setCellValue(columnNames.get(i));
+                    cell.setCellStyle(headerStyle);
                 }
 
                 // Create data rows
@@ -55,6 +59,12 @@ public class ExcelExporter {
                             }
                         }
                     }
+                }
+
+                // Set auto filter
+                if (!columnNames.isEmpty()) {
+                    int lastRow = Math.max(0, rows.size());
+                    sheet.setAutoFilter(new CellRangeAddress(0, lastRow, 0, columnNames.size() - 1));
                 }
             }
 
