@@ -66,6 +66,11 @@ public class ExcelExporter {
                     int lastRow = Math.max(0, rows.size());
                     sheet.setAutoFilter(new CellRangeAddress(0, lastRow, 0, columnNames.size() - 1));
                 }
+
+                // Auto-fit columns
+                for (int i = 0; i < columnNames.size(); i++) {
+                    sheet.autoSizeColumn(i);
+                }
             }
 
             try (FileOutputStream fileOut = new FileOutputStream(outputPath.toFile())) {
