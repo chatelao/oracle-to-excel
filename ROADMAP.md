@@ -6,8 +6,8 @@ This roadmap outlines the plan to implement the Oracle to Excel Exporter, as def
 
 | Phase | Description | Status |
 |-------|-------------|--------|
-| 1 | Foundation & Documentation | 🚧 |
-| 2 | Project Infrastructure | ⏳ |
+| 1 | Foundation & Documentation | ✅ |
+| 2 | Project Infrastructure | 🚧 |
 | 3 | Core Engine Development | ⏳ |
 | 4 | Data & Export Logic | ⏳ |
 | 5 | CLI & Integration | ⏳ |
@@ -31,14 +31,14 @@ Focus on defining the system architecture and requirements.
 - [x] Create `GEMINI.md`: Project structure and development guidelines.
 - [x] Create `TOP_ARCHITECTURE.puml`: Visual representation of components.
 - [x] Create `ROADMAP.md`: Project planning and tracking.
-- [ ] Create `TECHNICAL_DEBTS.md`: Initialize tracking of technical debts.
+- [x] Create `TECHNICAL_DEBTS.md`: Initialize tracking of technical debts. (2026-05-28)
 
 ## Phase 2: Project Infrastructure
 Setup the development environment and CI/CD pipelines.
 
-- [ ] Initialize Maven project with `pom.xml`.
-- [ ] Create `src/install.sh` for build tools.
-- [ ] Create `test/install.sh` for test tools.
+- [x] Initialize Maven project with `pom.xml`. (2026-05-28)
+- [x] Create `src/install.sh` for build tools. (2026-05-28)
+- [x] Create `test/install.sh` for test tools. (2026-05-28)
 - [ ] Setup GitHub Actions CI/CD workflow with compilation & tests.
 - [ ] Configure ReadTheDocs (RTD) for documentation publishing.
 
