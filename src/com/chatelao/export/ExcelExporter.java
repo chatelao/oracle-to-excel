@@ -48,11 +48,14 @@ public class ExcelExporter {
                     }
                 }
 
+                int topOffset = sheetData.getTopOffset();
+                int leftOffset = sheetData.getLeftOffset();
+
                 // Create header row
-                Row headerRow = sheet.createRow(0);
+                Row headerRow = sheet.createRow(topOffset);
                 List<String> columnNames = sheetData.getColumnNames();
                 for (int i = 0; i < columnNames.size(); i++) {
-                    Cell cell = headerRow.createCell(i);
+                    Cell cell = headerRow.createCell(i + leftOffset);
                     cell.setCellValue(columnNames.get(i));
                     cell.setCellStyle(headerStyle);
                 }
@@ -60,10 +63,10 @@ public class ExcelExporter {
                 // Create data rows
                 List<List<Object>> rows = sheetData.getRows();
                 for (int i = 0; i < rows.size(); i++) {
-                    Row row = sheet.createRow(i + 1);
+                    Row row = sheet.createRow(i + 1 + topOffset);
                     List<Object> rowData = rows.get(i);
                     for (int j = 0; j < rowData.size(); j++) {
-                        Cell cell = row.createCell(j);
+                        Cell cell = row.createCell(j + leftOffset);
 
                         // Apply column colors
                         if (!columnColors.isEmpty()) {
@@ -101,15 +104,16 @@ public class ExcelExporter {
 
                 // Set auto filter
                 if (!columnNames.isEmpty()) {
-                    int lastRow = Math.max(0, rows.size());
-                    sheet.setAutoFilter(new CellRangeAddress(0, lastRow, 0, columnNames.size() - 1));
+                    int lastRow = Math.max(topOffset, rows.size() + topOffset);
+                    sheet.setAutoFilter(new CellRangeAddress(topOffset, lastRow, leftOffset, columnNames.size() - 1 + leftOffset));
                 }
 
                 // Auto-fit columns
                 for (int i = 0; i < columnNames.size(); i++) {
-                    sheet.autoSizeColumn(i);
+                    int columnIndex = i + leftOffset;
+                    sheet.autoSizeColumn(columnIndex);
                     // Add extra width for the filter arrow
-                    sheet.setColumnWidth(i, sheet.getColumnWidth(i) + 1000);
+                    sheet.setColumnWidth(columnIndex, sheet.getColumnWidth(columnIndex) + 1000);
                 }
 
                 // Create pivot table if requested
@@ -121,10 +125,11 @@ public class ExcelExporter {
                     }
                     XSSFSheet pivotSheet = (XSSFSheet) workbook.createSheet(pivotSheetName);
 
-                    int lastRow = rows.size();
-                    int lastCol = columnNames.size() - 1;
+                    int lastRow = rows.size() + topOffset;
+                    int lastCol = columnNames.size() - 1 + leftOffset;
 
-                    String sourceRef = "'" + sheetData.getSheetName() + "'!A1:" +
+                    String sourceRef = "'" + sheetData.getSheetName() + "'!" +
+                                     new CellReference(topOffset, leftOffset).formatAsString() + ":" +
                                      new CellReference(lastRow, lastCol).formatAsString();
 
                     AreaReference source = new AreaReference(sourceRef, workbook.getSpreadsheetVersion());

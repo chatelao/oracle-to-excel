@@ -91,4 +91,5 @@ Support configurable column selection and category-based splitting.
 - [x] Implement dynamic file naming via `filename_columns`. (2026-05-29)
 - [x] Integrate splitting with row-based partitioning. (2026-05-29)
 - [x] Support column background colors via `column_colors`. (2026-05-30)
+- [x] Support top and left offsets for tables via `top_offset` and `left_offset`. (2026-05-29)
 - [x] Implement optional pivot table generation for each sheet. (2026-05-29)

@@ -2,6 +2,7 @@ package com.chatelao.export;
 
 import com.chatelao.model.SheetData;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFPivotTable;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -125,6 +126,55 @@ public class ExcelExporterTest {
     }
 
     @Test
+    public void testExportWithOffsets() throws Exception {
+        Path outputPath = tempDir.resolve("test_export_offsets.xlsx");
+
+        List<String> columnNames = Arrays.asList("ID", "NAME");
+        List<List<Object>> rows = Arrays.asList(
+                Arrays.asList(1, "Alice"),
+                Arrays.asList(2, "Bob")
+        );
+        int topOffset = 2;
+        int leftOffset = 3;
+        SheetData sheetData = new SheetData("Sheet1", columnNames, rows, null, null, topOffset, leftOffset);
+
+        ExcelExporter exporter = new ExcelExporter();
+        exporter.export(Arrays.asList(sheetData), outputPath);
+
+        assertTrue(outputPath.toFile().exists());
+
+        try (Workbook workbook = new XSSFWorkbook(new FileInputStream(outputPath.toFile()))) {
+            Sheet sheet = workbook.getSheetAt(0);
+
+            // Verify top left cells are empty
+            assertNull(sheet.getRow(0));
+            assertNull(sheet.getRow(1));
+            assertNull(sheet.getRow(2).getCell(0));
+            assertNull(sheet.getRow(2).getCell(1));
+            assertNull(sheet.getRow(2).getCell(2));
+
+            // Verify header position
+            assertEquals("ID", sheet.getRow(topOffset).getCell(leftOffset).getStringCellValue());
+            assertEquals("NAME", sheet.getRow(topOffset).getCell(leftOffset + 1).getStringCellValue());
+
+            // Verify data position
+            assertEquals(1.0, sheet.getRow(topOffset + 1).getCell(leftOffset).getNumericCellValue());
+            assertEquals("Alice", sheet.getRow(topOffset + 1).getCell(leftOffset + 1).getStringCellValue());
+            assertEquals(2.0, sheet.getRow(topOffset + 2).getCell(leftOffset).getNumericCellValue());
+            assertEquals("Bob", sheet.getRow(topOffset + 2).getCell(leftOffset + 1).getStringCellValue());
+
+            // Verify auto filter range
+            CellRangeAddress autoFilterRange = ((XSSFSheet)sheet).getCTWorksheet().getAutoFilter().getRef() != null ?
+                    CellRangeAddress.valueOf(((XSSFSheet)sheet).getCTWorksheet().getAutoFilter().getRef()) : null;
+            assertNotNull(autoFilterRange);
+            assertEquals(topOffset, autoFilterRange.getFirstRow());
+            assertEquals(topOffset + rows.size(), autoFilterRange.getLastRow());
+            assertEquals(leftOffset, autoFilterRange.getFirstColumn());
+            assertEquals(leftOffset + columnNames.size() - 1, autoFilterRange.getLastColumn());
+        }
+    }
+
+    @Test
     public void testExportWithPivotTable() throws Exception {
         Path outputPath = tempDir.resolve("test_export_pivot.xlsx");
 
@@ -134,7 +184,7 @@ public class ExcelExporterTest {
                 Arrays.asList("B", 20),
                 Arrays.asList("A", 30)
         );
-        SheetData sheetData = new SheetData("Data", columnNames, rows, null, null, true);
+        SheetData sheetData = new SheetData("Data", columnNames, rows, null, null, 0, 0, true);
 
         ExcelExporter exporter = new ExcelExporter();
         exporter.export(Arrays.asList(sheetData), outputPath);
