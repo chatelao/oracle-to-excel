@@ -81,8 +81,8 @@ public class Main implements Callable<Integer> {
                     try (Statement stmt = conn.createStatement();
                          ResultSet rs = stmt.executeQuery(sheetConfig.getQuery())) {
 
-                        SheetData data = dataProcessor.processData(rs, sheetConfig.getName());
-                        sheets.add(data);
+                        List<SheetData> dataList = dataProcessor.processData(rs, sheetConfig);
+                        sheets.addAll(dataList);
                     } catch (SQLException e) {
                         System.err.println("  Error executing query for sheet " + sheetConfig.getName() + ": " + e.getMessage());
                         return 1;

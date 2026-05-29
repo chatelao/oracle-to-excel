@@ -26,6 +26,7 @@ public class TomlConfigLoaderTest {
                 "[[exports.sheets]]\n" +
                 "name = \"Sheet1\"\n" +
                 "query = \"SELECT * FROM table1\"\n" +
+                "partition_size = 1000\n" +
                 "[[exports.sheets]]\n" +
                 "name = \"Sheet2\"\n" +
                 "query = \"SELECT * FROM table2\"\n";
@@ -50,6 +51,7 @@ public class TomlConfigLoaderTest {
         assertEquals(2, export.getSheets().size());
         assertEquals("Sheet1", export.getSheets().get(0).getName());
         assertEquals("SELECT * FROM table1", export.getSheets().get(0).getQuery());
+        assertEquals(1000, export.getSheets().get(0).getPartitionSize());
         assertEquals("Sheet2", export.getSheets().get(1).getName());
         assertEquals("SELECT * FROM table2", export.getSheets().get(1).getQuery());
     }

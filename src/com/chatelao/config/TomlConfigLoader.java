@@ -45,6 +45,10 @@ public class TomlConfigLoader {
                         SheetConfig sheetConfig = new SheetConfig();
                         sheetConfig.setName(sheetTable.getString("name"));
                         sheetConfig.setQuery(sheetTable.getString("query"));
+                        Long partitionSize = sheetTable.getLong("partition_size");
+                        if (partitionSize != null) {
+                            sheetConfig.setPartitionSize(partitionSize.intValue());
+                        }
                         sheets.add(sheetConfig);
                     }
                     exportConfig.setSheets(sheets);
