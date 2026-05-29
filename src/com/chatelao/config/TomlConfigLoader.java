@@ -29,6 +29,11 @@ public class TomlConfigLoader {
             config.setDatabase(dbConfig);
         }
 
+        TomlTable auditTable = result.getTable("audit");
+        if (auditTable != null) {
+            config.setAuditSheetName(auditTable.getString("sheet"));
+        }
+
         TomlArray exportsArray = result.getArray("exports");
         if (exportsArray != null) {
             List<ExportConfig> exports = new ArrayList<>();

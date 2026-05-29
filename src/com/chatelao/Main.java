@@ -29,6 +29,9 @@ public class Main implements Callable<Integer> {
     @Option(names = {"-c", "--config"}, description = "Path to the TOML configuration file.", required = true)
     private Path configPath;
 
+    @Option(names = {"--audit-sheet"}, description = "Name of the sheet to write audit information to.")
+    private String auditSheetName;
+
     public static void main(String[] args) {
         int exitCode = execute(args);
         System.exit(exitCode);
@@ -38,6 +41,37 @@ public class Main implements Callable<Integer> {
         return new CommandLine(new Main()).execute(args);
     }
 
+    private SheetData createAuditSheet(String sheetName, List<AuditEntry> auditEntries) {
+        List<String> columns = List.of("EXPORT_FILE", "SHEET_NAME", "QUERY", "STATUS", "ERROR_MESSAGE");
+        List<List<Object>> rows = new ArrayList<>();
+        for (AuditEntry entry : auditEntries) {
+            rows.add(List.of(
+                    entry.exportFilename != null ? entry.exportFilename : "",
+                    entry.sheetName != null ? entry.sheetName : "",
+                    entry.query != null ? entry.query : "",
+                    entry.status != null ? entry.status : "",
+                    entry.errorMessage != null ? entry.errorMessage : ""
+            ));
+        }
+        return new SheetData(sheetName, columns, rows);
+    }
+
+    private static class AuditEntry {
+        String exportFilename;
+        String sheetName;
+        String query;
+        String status;
+        String errorMessage;
+
+        AuditEntry(String exportFilename, String sheetName, String query, String status, String errorMessage) {
+            this.exportFilename = exportFilename;
+            this.sheetName = sheetName;
+            this.query = query;
+            this.status = status;
+            this.errorMessage = errorMessage;
+        }
+    }
+
     @Override
     public Integer call() throws Exception {
         System.out.println("Loading configuration from: " + configPath);
@@ -45,6 +79,9 @@ public class Main implements Callable<Integer> {
         Config config;
         try {
             config = loader.loadConfig(configPath);
+            if (this.auditSheetName != null) {
+                config.setAuditSheetName(this.auditSheetName);
+            }
         } catch (IOException e) {
             System.err.println("Failed to load configuration: " + e.getMessage());
             return 1;
@@ -69,6 +106,9 @@ public class Main implements Callable<Integer> {
             return 0;
         }
 
+        List<AuditEntry> auditEntries = new ArrayList<>();
+        boolean anyError = false;
+
         for (ExportConfig export : config.getExports()) {
             System.out.println("Processing export: " + export.getFilename());
             List<SheetData> allSheetsData = new ArrayList<>();
@@ -85,9 +125,14 @@ public class Main implements Callable<Integer> {
 
                         List<SheetData> dataList = dataProcessor.processData(rs, sheetConfig);
                         allSheetsData.addAll(dataList);
+                        auditEntries.add(new AuditEntry(export.getFilename(), sheetConfig.getName(), sheetConfig.getQuery(), "SUCCESS", null));
                     } catch (SQLException e) {
                         System.err.println("  Error executing query for sheet " + sheetConfig.getName() + ": " + e.getMessage());
-                        return 1;
+                        auditEntries.add(new AuditEntry(export.getFilename(), sheetConfig.getName(), sheetConfig.getQuery(), "FAILED", e.getMessage()));
+                        anyError = true;
+                        if (config.getAuditSheetName() == null) {
+                            return 1;
+                        }
                     }
                 }
             } catch (SQLException e) {
@@ -97,6 +142,9 @@ public class Main implements Callable<Integer> {
 
             // Group by target filename
             Map<String, List<SheetData>> fileGroups = new LinkedHashMap<>();
+            if (allSheetsData.isEmpty() && config.getAuditSheetName() != null) {
+                fileGroups.put(export.getFilename(), new ArrayList<>());
+            }
             for (SheetData sd : allSheetsData) {
                 String targetFilename = sd.getTargetFileName();
                 if (targetFilename == null || targetFilename.isEmpty()) {
@@ -117,6 +165,11 @@ public class Main implements Callable<Integer> {
             for (Map.Entry<String, List<SheetData>> entry : fileGroups.entrySet()) {
                 String filename = entry.getKey();
                 List<SheetData> sheets = entry.getValue();
+
+                if (config.getAuditSheetName() != null) {
+                    sheets.add(createAuditSheet(config.getAuditSheetName(), auditEntries));
+                }
+
                 try {
                     exporter.export(sheets, Path.of(filename));
                     System.out.println("  Export completed: " + filename);
@@ -125,6 +178,11 @@ public class Main implements Callable<Integer> {
                     return 1;
                 }
             }
+        }
+
+        if (anyError) {
+            System.err.println("Some exports failed. See audit for details.");
+            return 1;
         }
 
         System.out.println("All exports completed successfully.");
