@@ -18,7 +18,7 @@ ConfigFile -> ConfigMgr : reads
 ConfigMgr -> CLI : configuration data
 
 CLI -> QueryEngine : 2. Execute SQL
-QueryEngine -> DB : SQL queries
+QueryEngine --> DB : SQL queries
 DB -> QueryEngine : result sets
 
 QueryEngine -> DataProc : 3. Pass raw data
