@@ -44,6 +44,11 @@
       <artifactId>poi-ooxml</artifactId>
       <version>5.5.1</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.24.3</version>
+    </dependency>
 
     <!-- Testing -->
     <dependency>
@@ -126,8 +131,9 @@
                   <artifact>*:*</artifact>
                   <excludes>
                     <exclude>module-info.class</exclude>
-                    <exclude>META-INF/MANIFEST.MF</exclude>
-                    <exclude>META-INF/versions/9/module-info.class</exclude>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
                   </excludes>
                 </filter>
               </filters>
