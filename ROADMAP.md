@@ -7,11 +7,11 @@ This roadmap outlines the plan to implement the Oracle to Excel Exporter, as def
 | Phase | Description | Status |
 |-------|-------------|--------|
 | 1 | Foundation & Documentation | ✅ |
-| 2 | Project Infrastructure | 🚧 |
+| 2 | Project Infrastructure | ✅ |
 | 3 | Core Engine Development | ✅ |
 | 4 | Data & Export Logic | 🚧 |
 | 5 | CLI & Integration | ✅ |
-| 6 | Validation & Release | 🚧 |
+| 6 | Validation & Release | ✅ |
 
 ## Goals
 
@@ -33,13 +33,14 @@ Focus on defining the system architecture and requirements.
 - [x] Create `ROADMAP.md`: Project planning and tracking.
 - [x] Create `TECHNICAL_DEBTS.md`: Initialize tracking of technical debts. (2026-05-28)
 
-## Phase 2: Project Infrastructure 🚧
+## Phase 2: Project Infrastructure ✅
 Setup the development environment and CI/CD pipelines.
 
 - [x] Initialize Maven project with `pom.xml`. (2026-05-28)
 - [x] Create `src/install.sh` for build tools. (2026-05-28)
 - [x] Create `test/install.sh` for test tools. (2026-05-28)
 - [x] Setup GitHub Actions CI/CD workflow with compilation & tests. (2026-05-29)
+- [x] Configure Oracle Database integration for CI. (2026-05-29)
 - [ ] Configure ReadTheDocs (RTD) for documentation publishing.
 
 ## Phase 3: Core Engine Development ✅
@@ -71,10 +72,11 @@ Tie the components together and provide a user-friendly interface.
   - [x] Coordinate data flow between components. (2026-05-29)
   - [x] Support both CLI options and TOML configuration files. (2026-05-29)
 
-## Phase 6: Validation & Release 🚧
+## Phase 6: Validation & Release ✅
 Ensure quality and distribute the tool.
 
 - [x] Implement unit and integration tests in `/test/`. (2026-05-29)
+- [x] Implement real Oracle Database integration test. (2026-05-29)
 - [ ] Verify use cases (UC1-UC4).
 - [ ] Generate standalone JAR as a release asset.
 - [ ] Finalize `README.md` with usage instructions and GitHub Pages link.
