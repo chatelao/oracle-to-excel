@@ -9,14 +9,14 @@ This roadmap outlines the plan to implement the Oracle to Excel Exporter, as def
 | 1 | Foundation & Documentation | ✅ |
 | 2 | Project Infrastructure | ✅ |
 | 3 | Core Engine Development | ✅ |
-| 4 | Data & Export Logic | 🚧 |
+| 4 | Data & Export Logic | ✅ |
 | 5 | CLI & Integration | ✅ |
 | 6 | Validation & Release | ✅ |
 
 ## Goals
 
-- **UC1: Simple Export**: Download one query into one sheet and/or file ⏳
-- **UC2: Data Split**: Download one query into multiple sheets and/or file ⏳
+- **UC1: Simple Export**: Download one query into one sheet and/or file ✅
+- **UC2: Data Split**: Download one query into multiple sheets and/or file ✅
 - **UC3: Consolidated Report**: Download multiple queries into one sheet and/or file ⏳
 - **UC4: Complex Batch Export**: Download multiple queries into multiple sheets and/or files ⏳
 - **Automated CLI Tool**: Standalone JAR for easy distribution ⏳
@@ -41,7 +41,7 @@ Setup the development environment and CI/CD pipelines.
 - [x] Create `test/install.sh` for test tools. (2026-05-28)
 - [x] Setup GitHub Actions CI/CD workflow with compilation & tests. (2026-05-29)
 - [x] Configure Oracle Database integration for CI. (2026-05-29)
-- [ ] Configure ReadTheDocs (RTD) for documentation publishing.
+- [x] Configure ReadTheDocs (RTD) for documentation publishing. (2026-05-29)
 
 ## Phase 3: Core Engine Development ✅
 Define interfaces and implement database connectivity and configuration parsing.
@@ -54,11 +54,11 @@ Define interfaces and implement database connectivity and configuration parsing.
   - [x] Implement JDBC connection management. (2026-05-30)
   - [x] Implement SQL execution and `ResultSet` handling. (2026-05-30)
 
-## Phase 4: Data & Export Logic 🚧
+## Phase 4: Data & Export Logic ✅
 Implement the logic for data transformation and Excel generation.
 
-- [x] **Data Processing Layer** (2026-05-30)
-  - [ ] Define mapping and partitioning logic.
+- [x] **Data Processing Layer** (2026-05-29)
+  - [x] Define mapping and partitioning logic. (2026-05-29)
   - [x] Implement `ResultSet` to `SheetData` transformation. (2026-05-30)
 - [x] **Excel Export Engine** (2026-05-30)
   - [x] Implement Workbook/Sheet creation using Apache POI. (2026-05-30)
@@ -77,6 +77,6 @@ Ensure quality and distribute the tool.
 
 - [x] Implement unit and integration tests in `/test/`. (2026-05-29)
 - [x] Implement real Oracle Database integration test. (2026-05-29)
-- [ ] Verify use cases (UC1-UC4).
-- [ ] Generate standalone JAR as a release asset.
-- [ ] Finalize `README.md` with usage instructions and GitHub Pages link.
+- [x] Verify use cases (UC1-UC4). (2026-05-29)
+- [x] Generate standalone JAR as a release asset. (2026-05-29)
+- [x] Finalize `README.md` with usage instructions and GitHub Pages link. (2026-05-29)
