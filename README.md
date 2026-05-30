@@ -39,27 +39,27 @@ java -jar target/oracle-to-excel-0.1.0-SNAPSHOT.jar --config path/to/your/config
 ```toml
 [database]
 url = "jdbc:oracle:thin:@your-host:1521:your-service"
-username = "your_user"
-password = "your_password"
+username = "scott"
+password = "tiger"
 
 [[exports]]
-filename = "monthly_report.xlsx"
+filename = "hr_report.xlsx"
 
   [[exports.sheets]]
-  name = "Sales_Data"
-  query = "SELECT * FROM sales WHERE month = '2026-05'"
-  # Optional: Split results into sheets of 10,000 rows each (Sales_Data_1, Sales_Data_2, etc.)
+  name = "Employee_Data"
+  query = "SELECT * FROM EMP"
+  # Optional: Split results into sheets of 10,000 rows each (Employee_Data_1, Employee_Data_2, etc.)
   partition_size = 10000
 
   [[exports.sheets]]
-  name = "Inventory_Summary"
-  query = "SELECT category, COUNT(*) FROM inventory GROUP BY category"
+  name = "Department_Summary"
+  query = "SELECT DNAME, COUNT(*) FROM DEPT GROUP BY DNAME"
 
 [[exports]]
 filename = "audit_log.xlsx"
   [[exports.sheets]]
   name = "Full_Audit"
-  query = "SELECT * FROM audit_logs"
+  query = "SELECT * FROM EMP"
 ```
 
 ## Documentation

@@ -24,12 +24,12 @@ public class TomlConfigLoaderTest {
                 "[[exports]]\n" +
                 "filename = \"report1.xlsx\"\n" +
                 "[[exports.sheets]]\n" +
-                "name = \"Sheet1\"\n" +
-                "query = \"SELECT * FROM table1\"\n" +
+                "name = \"Employees\"\n" +
+                "query = \"SELECT * FROM EMP\"\n" +
                 "partition_size = 1000\n" +
                 "[[exports.sheets]]\n" +
-                "name = \"Sheet2\"\n" +
-                "query = \"SELECT * FROM table2\"\n";
+                "name = \"Departments\"\n" +
+                "query = \"SELECT * FROM DEPT\"\n";
 
         Path configPath = tempDir.resolve("config.toml");
         Files.writeString(configPath, tomlContent);
@@ -49,11 +49,11 @@ public class TomlConfigLoaderTest {
 
         assertNotNull(export.getSheets());
         assertEquals(2, export.getSheets().size());
-        assertEquals("Sheet1", export.getSheets().get(0).getName());
-        assertEquals("SELECT * FROM table1", export.getSheets().get(0).getQuery());
+        assertEquals("Employees", export.getSheets().get(0).getName());
+        assertEquals("SELECT * FROM EMP", export.getSheets().get(0).getQuery());
         assertEquals(1000, export.getSheets().get(0).getPartitionSize());
-        assertEquals("Sheet2", export.getSheets().get(1).getName());
-        assertEquals("SELECT * FROM table2", export.getSheets().get(1).getQuery());
+        assertEquals("Departments", export.getSheets().get(1).getName());
+        assertEquals("SELECT * FROM DEPT", export.getSheets().get(1).getQuery());
     }
 
     @Test
@@ -61,8 +61,8 @@ public class TomlConfigLoaderTest {
         String tomlContent = "[[exports]]\n" +
                 "filename = \"report.xlsx\"\n" +
                 "[[exports.sheets]]\n" +
-                "name = \"Sheet1\"\n" +
-                "query = \"SELECT * FROM table1\"\n" +
+                "name = \"Employees\"\n" +
+                "query = \"SELECT * FROM EMP\"\n" +
                 "top_offset = 5\n" +
                 "left_offset = 2\n";
 
@@ -82,11 +82,11 @@ public class TomlConfigLoaderTest {
         String tomlContent = "[[exports]]\n" +
                 "filename = \"report.xlsx\"\n" +
                 "[[exports.sheets]]\n" +
-                "name = \"Sheet1\"\n" +
-                "query = \"SELECT * FROM table1\"\n" +
+                "name = \"Employees\"\n" +
+                "query = \"SELECT * FROM EMP\"\n" +
                 "[exports.sheets.column_colors]\n" +
-                "ID = \"#FF0000\"\n" +
-                "NAME = \"#00FF00\"\n";
+                "EMPNO = \"#FF0000\"\n" +
+                "ENAME = \"#00FF00\"\n";
 
         Path configPath = tempDir.resolve("config_colors.toml");
         Files.writeString(configPath, tomlContent);
@@ -96,13 +96,13 @@ public class TomlConfigLoaderTest {
 
         SheetConfig sheet = config.getExports().get(0).getSheets().get(0);
         assertNotNull(sheet.getColumnColors());
-        assertEquals("#FF0000", sheet.getColumnColors().get("ID"));
-        assertEquals("#00FF00", sheet.getColumnColors().get("NAME"));
+        assertEquals("#FF0000", sheet.getColumnColors().get("EMPNO"));
+        assertEquals("#00FF00", sheet.getColumnColors().get("ENAME"));
     }
 
     @Test
     public void testLoadConfigWithExternalSqlFile() throws IOException {
-        String sqlContent = "SELECT * FROM external_table";
+        String sqlContent = "SELECT * FROM EMP";
         Path sqlPath = tempDir.resolve("query.sql");
         Files.writeString(sqlPath, sqlContent);
 
