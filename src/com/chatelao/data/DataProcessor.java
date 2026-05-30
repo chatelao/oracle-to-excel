@@ -82,7 +82,7 @@ public class DataProcessor {
         int leftOffset = sheetConfig.getLeftOffset() != null ? sheetConfig.getLeftOffset() : 0;
 
         if (!hasRows) {
-            sheets.add(new SheetData(sheetConfig.getName(), targetColumns, new ArrayList<>(), null, sheetConfig.getColumnColors(), topOffset, leftOffset));
+            sheets.add(new SheetData(sheetConfig.getName(), targetColumns, new ArrayList<>(), null, sheetConfig.getColumnColors(), topOffset, leftOffset, sheetConfig.isPivotTable()));
             return sheets;
         }
 
@@ -105,7 +105,7 @@ public class DataProcessor {
                         int end = Math.min(i + partitionSize, allRows.size());
                         List<List<Object>> partition = allRows.subList(i, end);
                         String name = baseSheetName + "_" + partitionIndex;
-                        SheetData sd = new SheetData(name, targetColumns, new ArrayList<>(partition), null, sheetConfig.getColumnColors(), topOffset, leftOffset);
+                        SheetData sd = new SheetData(name, targetColumns, new ArrayList<>(partition), null, sheetConfig.getColumnColors(), topOffset, leftOffset, sheetConfig.isPivotTable());
                         if (!filenamePart.isEmpty()) {
                             sd.setTargetFileName(filenamePart);
                         }
@@ -113,7 +113,7 @@ public class DataProcessor {
                         partitionIndex++;
                     }
                 } else {
-                    SheetData sd = new SheetData(baseSheetName, targetColumns, allRows, null, sheetConfig.getColumnColors(), topOffset, leftOffset);
+                    SheetData sd = new SheetData(baseSheetName, targetColumns, allRows, null, sheetConfig.getColumnColors(), topOffset, leftOffset, sheetConfig.isPivotTable());
                     if (!filenamePart.isEmpty()) {
                         sd.setTargetFileName(filenamePart);
                     }
