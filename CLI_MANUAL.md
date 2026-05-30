@@ -102,7 +102,7 @@ The `[[exports.sheets]]` array (nested under an export) defines the sheets withi
 | Field | Type | Description |
 | --- | --- | --- |
 | `name` | String | The base name for the Excel sheet. |
-| `query` | String | The SQL query to execute. |
+| `query` | String | The SQL query to execute. Can also be a path to a `.sql` file relative to the TOML configuration. |
 | `partition_size` | Integer | (Optional) Max rows per sheet. Splits into `name_1`, `name_2`, etc. |
 | `top_offset` | Integer | (Optional) Number of empty rows at the top of the sheet. |
 | `left_offset` | Integer | (Optional) Number of empty columns at the left of the sheet. |
@@ -226,17 +226,32 @@ filename = "financial_report.xlsx"
   # Highlight the TOTAL column in light green
   TOTAL = "#90EE90"
 
-### Pivot Tables
-You can automatically generate a pivot table for any sheet by setting `pivot_table = true`.
+### External SQL Files
+Instead of embedding long SQL queries directly in the TOML file, you can reference external `.sql` files. The path to the SQL file should be relative to the location of the TOML configuration file.
 
+**`config.toml`**
 ```toml
 [[exports]]
-filename = "sales_pivot.xlsx"
+filename = "employees_report.xlsx"
   [[exports.sheets]]
-  name = "SalesData"
-  query = "SELECT category, region, amount FROM sales"
-  # Enable automatic pivot table generation
-  pivot_table = true
+  name = "Employees"
+  # Path to the external SQL file
+  query = "queries/all_employees.sql"
 ```
-The tool will create a companion sheet named `SalesData_Pivot`. By default, it uses the first column (`category`) as the row label and the last column (`amount`) as the SUM-aggregated data field.
+
+**`queries/all_employees.sql`**
+```sql
+SELECT
+    first_name,
+    last_name,
+    email,
+    hire_date,
+    salary
+FROM
+    employees
+WHERE
+    status = 'ACTIVE'
+ORDER BY
+    last_name,
+    first_name
 ```

@@ -101,6 +101,28 @@ public class TomlConfigLoaderTest {
     }
 
     @Test
+    public void testLoadConfigWithExternalSqlFile() throws IOException {
+        String sqlContent = "SELECT * FROM external_table";
+        Path sqlPath = tempDir.resolve("query.sql");
+        Files.writeString(sqlPath, sqlContent);
+
+        String tomlContent = "[[exports]]\n" +
+                "filename = \"report.xlsx\"\n" +
+                "[[exports.sheets]]\n" +
+                "name = \"Sheet1\"\n" +
+                "query = \"query.sql\"\n";
+
+        Path configPath = tempDir.resolve("config_external.toml");
+        Files.writeString(configPath, tomlContent);
+
+        TomlConfigLoader loader = new TomlConfigLoader();
+        Config config = loader.loadConfig(configPath);
+
+        SheetConfig sheet = config.getExports().get(0).getSheets().get(0);
+        assertEquals(sqlContent, sheet.getQuery());
+    }
+
+    @Test
     public void testLoadNonExistentFile() {
         TomlConfigLoader loader = new TomlConfigLoader();
         Path nonExistentPath = tempDir.resolve("non_existent.toml");

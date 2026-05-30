@@ -50,6 +50,7 @@ Define interfaces and implement database connectivity and configuration parsing.
 - [x] **Configuration Manager** (2026-05-30)
   - [x] Define `Config` internal models. (2026-05-29)
   - [x] Implement TOML parsing using `tomlj`. (2026-05-30)
+  - [x] Support external SQL files in configuration. (2026-05-30)
 - [x] **Oracle Query Engine** (2026-05-30)
   - [x] Define `QueryEngine` interface. (2026-05-29)
   - [x] Implement JDBC connection management. (2026-05-30)
