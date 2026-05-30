@@ -34,6 +34,44 @@ Run the tool by providing a path to your TOML configuration file:
 java -jar target/oracle-to-excel-0.1.0-SNAPSHOT.jar --config path/to/your/config.toml
 ```
 
+### CLI Options
+
+| Option | Short | Description | Required |
+| --- | --- | --- | --- |
+| `--config` | `-c` | Path to the TOML configuration file. | Yes |
+| `--audit-sheet` | | Name of the sheet to write audit information to. | No |
+| `--help` | `-h` | Show help message and exit. | No |
+| `--version` | `-V` | Print version information and exit. | No |
+
+## Configuration Options
+
+The tool is configured via a TOML file. Below are the available sections and keys.
+
+### Database Settings (`[database]`)
+- `url`: JDBC connection URL for the Oracle database.
+- `username`: Database username.
+- `password`: Database password.
+
+### Audit Settings (`[audit]`)
+- `sheet`: (Optional) Global name for the execution audit sheet added to all generated files.
+
+### Export Tasks (`[[exports]]`)
+- `filename`: Target Excel filename.
+- `sheets`: Array of sheet configurations.
+
+### Sheet Settings (`[[exports.sheets]]`)
+- `name`: Base name for the worksheet.
+- `query`: SQL query string or path to a `.sql` file (relative to config).
+- `partition_size`: (Optional) Max rows per sheet for partitioning.
+- `columns`: (Optional) List of columns to include and their order.
+- `sheetname_columns`: (Optional) Columns used for dynamic sheet naming.
+- `filename_columns`: (Optional) Columns used for dynamic file naming.
+- `column_colors`: (Optional) Mapping of column names to hex colors (e.g., `{ TOTAL = "#90EE90" }`).
+- `top_offset`: (Optional) Number of empty rows at the top of the sheet.
+- `left_offset`: (Optional) Number of empty columns at the left of the sheet.
+- `pivot_table`: (Optional) Boolean to generate a companion pivot table sheet.
+- `page_title`: (Optional) Boolean to add a large, stylized title row at the top.
+
 ### Configuration Example (`config.toml`)
 
 ```toml
@@ -42,28 +80,28 @@ url = "jdbc:oracle:thin:@your-host:1521:your-service"
 username = "your_user"
 password = "your_password"
 
+[audit]
+sheet = "Execution_Log"
+
 [[exports]]
 filename = "monthly_report.xlsx"
 
   [[exports.sheets]]
   name = "Sales_Data"
   query = "SELECT * FROM sales WHERE month = '2026-05'"
-  # Optional: Split results into sheets of 10,000 rows each (Sales_Data_1, Sales_Data_2, etc.)
   partition_size = 10000
+  page_title = true
+  column_colors = { REVENUE = "#ADD8E6" }
 
   [[exports.sheets]]
   name = "Inventory_Summary"
-  query = "SELECT category, COUNT(*) FROM inventory GROUP BY category"
-
-[[exports]]
-filename = "audit_log.xlsx"
-  [[exports.sheets]]
-  name = "Full_Audit"
-  query = "SELECT * FROM audit_logs"
+  query = "queries/inventory.sql"
+  pivot_table = true
 ```
 
 ## Documentation
 
+- [CLI Manual](CLI_MANUAL.md) - Detailed guide and advanced features.
 - [Concept](CONCEPT.md)
 - [Design](DESIGN.md)
 - [Roadmap](ROADMAP.md)
