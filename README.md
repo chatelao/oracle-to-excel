@@ -77,27 +77,32 @@ The tool is configured via a TOML file. Below are the available sections and key
 ```toml
 [database]
 url = "jdbc:oracle:thin:@your-host:1521:your-service"
-username = "your_user"
-password = "your_password"
+username = "scott"
+password = "tiger"
 
 [audit]
 sheet = "Execution_Log"
 
 [[exports]]
-filename = "monthly_report.xlsx"
+filename = "hr_report.xlsx"
 
   [[exports.sheets]]
-  name = "Sales_Data"
-  query = "SELECT * FROM sales WHERE month = '2026-05'"
+  name = "Employee_Data"
+  query = "SELECT * FROM EMP"
+  # Optional: Split results into sheets of 10,000 rows each (Employee_Data_1, Employee_Data_2, etc.)
   partition_size = 10000
   page_title = true
   column_colors = { REVENUE = "#ADD8E6" }
 
   [[exports.sheets]]
-  name = "Inventory_Summary"
-  query = "queries/inventory.sql"
-  pivot_table = true
-```
+  name = "Department_Summary"
+  query = "SELECT DNAME, COUNT(*) FROM DEPT GROUP BY DNAME"
+
+[[exports]]
+filename = "audit_log.xlsx"
+  [[exports.sheets]]
+  name = "Full_Audit"
+  query = "SELECT * FROM EMP"
 
 ## Documentation
 
