@@ -224,4 +224,33 @@ filename = "financial_report.xlsx"
   REVENUE = "#ADD8E6"
   # Highlight the TOTAL column in light green
   TOTAL = "#90EE90"
+
+### External SQL Files
+Instead of embedding long SQL queries directly in the TOML file, you can reference external `.sql` files. The path to the SQL file should be relative to the location of the TOML configuration file.
+
+**`config.toml`**
+```toml
+[[exports]]
+filename = "employees_report.xlsx"
+  [[exports.sheets]]
+  name = "Employees"
+  # Path to the external SQL file
+  query = "queries/all_employees.sql"
+```
+
+**`queries/all_employees.sql`**
+```sql
+SELECT
+    first_name,
+    last_name,
+    email,
+    hire_date,
+    salary
+FROM
+    employees
+WHERE
+    status = 'ACTIVE'
+ORDER BY
+    last_name,
+    first_name
 ```
