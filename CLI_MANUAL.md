@@ -73,9 +73,10 @@ The `[database]` section defines the connection details.
 # The JDBC connection URL for the Oracle database
 url = "jdbc:oracle:thin:@//localhost:1521/FREEPDB1"
 # Database user account
-username = "system"
+username = "scott"
 # Password for the database user (stored in plain text; ensure file permissions are restricted)
-password = "password"
+password = "tiger"
+```
 
 ### Audit Configuration
 The `[audit]` section defines global audit settings.
@@ -123,12 +124,12 @@ Export a single query to one sheet in one file.
 ```toml
 [[exports]]
 # Target filename
-filename = "employees.xlsx"
+filename = "emp_report.xlsx"
   [[exports.sheets]]
   # Name of the worksheet
   name = "All_Employees"
   # SQL query to fetch data
-  query = "SELECT * FROM employees"
+  query = "SELECT * FROM EMP"
 ```
 
 ### UC2: Data Split (Row Partitioning)
@@ -136,10 +137,10 @@ Split a large result set into multiple sheets of 10,000 rows each.
 
 ```toml
 [[exports]]
-filename = "large_report.xlsx"
+filename = "large_emp_report.xlsx"
   [[exports.sheets]]
   name = "Data"
-  query = "SELECT * FROM large_table"
+  query = "SELECT * FROM EMP"
   # Maximum number of rows per worksheet
   partition_size = 10000
 ```
@@ -154,17 +155,17 @@ Multiple queries into multiple sheets and files.
 filename = "hr_reports.xlsx"
   [[exports.sheets]]
   name = "Departments"
-  query = "SELECT * FROM departments"
+  query = "SELECT * FROM DEPT"
   [[exports.sheets]]
-  name = "Jobs"
-  query = "SELECT * FROM jobs"
+  name = "Employees"
+  query = "SELECT * FROM EMP"
 
-# Second file: Financial reports
+# Second file: Salary reports
 [[exports]]
-filename = "financial_reports.xlsx"
+filename = "salary_reports.xlsx"
   [[exports.sheets]]
   name = "Salaries"
-  query = "SELECT * FROM salary_history"
+  query = "SELECT * FROM EMP"
 ```
 
 ---
@@ -177,40 +178,40 @@ You can split data into separate sheets or even separate files based on the valu
 #### Dynamic Sheet Naming
 ```toml
 [[exports]]
-filename = "sales_by_region.xlsx"
+filename = "emp_by_job.xlsx"
   [[exports.sheets]]
-  name = "Sales"
-  query = "SELECT * FROM sales"
+  name = "Emp"
+  query = "SELECT * FROM EMP"
   # Column(s) whose values will be appended to the sheet name
-  sheetname_columns = ["REGION"]
+  sheetname_columns = ["JOB"]
 ```
-If `REGION` has values 'North' and 'South', you will get sheets `Sales_North` and `Sales_South`.
+If `JOB` has values 'CLERK' and 'MANAGER', you will get sheets `Emp_CLERK` and `Emp_MANAGER`.
 
 #### Dynamic File Naming
 ```toml
 [[exports]]
-filename = "sales_report.xlsx"
+filename = "emp_report.xlsx"
   [[exports.sheets]]
   name = "Data"
-  query = "SELECT * FROM sales"
+  query = "SELECT * FROM EMP"
   # Column(s) whose values will be appended to the filename
-  filename_columns = ["YEAR"]
+  filename_columns = ["DEPTNO"]
 ```
-If `YEAR` has 2023 and 2024, it will create `sales_report_2023.xlsx` and `sales_report_2024.xlsx`.
+If `DEPTNO` has 10 and 20, it will create `emp_report_10.xlsx` and `emp_report_20.xlsx`.
 
 ### Column Selection and Ordering
 Use the `columns` field to filter which columns are exported and define their order in the Excel file.
 
 ```toml
 [[exports]]
-filename = "contact_list.xlsx"
+filename = "emp_contact_list.xlsx"
   [[exports.sheets]]
   name = "Contacts"
-  query = "SELECT first_name, last_name, email, phone_number, id FROM users"
+  query = "SELECT ENAME, JOB, SAL, COMM, EMPNO FROM EMP"
   # Explicitly select and order columns for export
-  columns = ["LAST_NAME", "FIRST_NAME", "EMAIL"]
+  columns = ["ENAME", "JOB", "SAL"]
 ```
-Only `LAST_NAME`, `FIRST_NAME`, and `EMAIL` will be exported, in that specific order.
+Only `ENAME`, `JOB`, and `SAL` will be exported, in that specific order.
 
 ### Page Title
 You can add a large, bold title at the top of your sheets by enabling `page_title`.
@@ -219,27 +220,28 @@ You can add a large, bold title at the top of your sheets by enabling `page_titl
 [[exports]]
 filename = "styled_report.xlsx"
   [[exports.sheets]]
-  name = "Sales_2024"
-  query = "SELECT * FROM sales"
+  name = "Employees_2024"
+  query = "SELECT * FROM EMP"
   # Enable page title
   page_title = true
 ```
-This will add two rows at the top. The first row will contain "Sales_2024" in font size 20, and the second row will be empty, followed by your data table.
+This will add two rows at the top. The first row will contain "Employees_2024" in font size 20, and the second row will be empty, followed by your data table.
 
 ### Column Background Colors
 You can highlight specific columns by defining background colors in the `column_colors` table. Colors are specified as hex codes.
 
 ```toml
 [[exports]]
-filename = "financial_report.xlsx"
+filename = "salary_report.xlsx"
   [[exports.sheets]]
-  name = "Revenue"
-  query = "SELECT region, revenue, tax, total FROM sales"
+  name = "Salaries"
+  query = "SELECT ENAME, SAL, COMM, JOB FROM EMP"
   [exports.sheets.column_colors]
-  # Highlight the REVENUE column in light blue
-  REVENUE = "#ADD8E6"
-  # Highlight the TOTAL column in light green
-  TOTAL = "#90EE90"
+  # Highlight the SAL column in light blue
+  SAL = "#ADD8E6"
+  # Highlight the COMM column in light green
+  COMM = "#90EE90"
+```
 
 ### External SQL Files
 Instead of embedding long SQL queries directly in the TOML file, you can reference external `.sql` files. The path to the SQL file should be relative to the location of the TOML configuration file.
@@ -247,26 +249,24 @@ Instead of embedding long SQL queries directly in the TOML file, you can referen
 **`config.toml`**
 ```toml
 [[exports]]
-filename = "employees_report.xlsx"
+filename = "emp_report.xlsx"
   [[exports.sheets]]
   name = "Employees"
   # Path to the external SQL file
-  query = "queries/all_employees.sql"
+  query = "queries/all_emp.sql"
 ```
 
-**`queries/all_employees.sql`**
+**`queries/all_emp.sql`**
 ```sql
 SELECT
-    first_name,
-    last_name,
-    email,
-    hire_date,
-    salary
+    ENAME,
+    JOB,
+    SAL,
+    HIREDATE
 FROM
-    employees
+    EMP
 WHERE
-    status = 'ACTIVE'
+    DEPTNO = 10
 ORDER BY
-    last_name,
-    first_name
+    ENAME
 ```
