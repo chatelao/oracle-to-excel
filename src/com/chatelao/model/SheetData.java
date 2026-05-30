@@ -12,24 +12,29 @@ public class SheetData {
     private int topOffset;
     private int leftOffset;
     private boolean pivotTable;
+    private boolean pageTitle;
 
     public SheetData(String sheetName, List<String> columnNames, List<List<Object>> rows) {
-        this(sheetName, columnNames, rows, null, null, 0, 0, false);
+        this(sheetName, columnNames, rows, null, null, 0, 0, false, false);
     }
 
     public SheetData(String sheetName, List<String> columnNames, List<List<Object>> rows, String targetFileName) {
-        this(sheetName, columnNames, rows, targetFileName, null, 0, 0, false);
+        this(sheetName, columnNames, rows, targetFileName, null, 0, 0, false, false);
     }
 
     public SheetData(String sheetName, List<String> columnNames, List<List<Object>> rows, String targetFileName, Map<String, String> columnColors) {
-        this(sheetName, columnNames, rows, targetFileName, columnColors, 0, 0, false);
+        this(sheetName, columnNames, rows, targetFileName, columnColors, 0, 0, false, false);
     }
 
     public SheetData(String sheetName, List<String> columnNames, List<List<Object>> rows, String targetFileName, Map<String, String> columnColors, int topOffset, int leftOffset) {
-        this(sheetName, columnNames, rows, targetFileName, columnColors, topOffset, leftOffset, false);
+        this(sheetName, columnNames, rows, targetFileName, columnColors, topOffset, leftOffset, false, false);
     }
 
     public SheetData(String sheetName, List<String> columnNames, List<List<Object>> rows, String targetFileName, Map<String, String> columnColors, int topOffset, int leftOffset, boolean pivotTable) {
+        this(sheetName, columnNames, rows, targetFileName, columnColors, topOffset, leftOffset, pivotTable, false);
+    }
+
+    public SheetData(String sheetName, List<String> columnNames, List<List<Object>> rows, String targetFileName, Map<String, String> columnColors, int topOffset, int leftOffset, boolean pivotTable, boolean pageTitle) {
         this.sheetName = sheetName;
         this.columnNames = columnNames;
         this.rows = rows;
@@ -38,6 +43,7 @@ public class SheetData {
         this.topOffset = topOffset;
         this.leftOffset = leftOffset;
         this.pivotTable = pivotTable;
+        this.pageTitle = pageTitle;
     }
 
     public String getSheetName() {
@@ -78,5 +84,9 @@ public class SheetData {
 
     public boolean isPivotTable() {
         return pivotTable;
+    }
+
+    public boolean isPageTitle() {
+        return pageTitle;
     }
 }

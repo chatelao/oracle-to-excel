@@ -14,6 +14,7 @@ public class SheetConfig {
     private Integer topOffset;
     private Integer leftOffset;
     private boolean pivotTable;
+    private boolean pageTitle;
 
     public String getName() {
         return name;
@@ -93,5 +94,13 @@ public class SheetConfig {
 
     public void setPivotTable(boolean pivotTable) {
         this.pivotTable = pivotTable;
+    }
+
+    public boolean isPageTitle() {
+        return pageTitle;
+    }
+
+    public void setPageTitle(boolean pageTitle) {
+        this.pageTitle = pageTitle;
     }
 }

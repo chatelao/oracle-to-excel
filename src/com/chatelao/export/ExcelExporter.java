@@ -37,6 +37,12 @@ public class ExcelExporter {
             headerFont.setBold(true);
             headerStyle.setFont(headerFont);
 
+            CellStyle titleStyle = workbook.createCellStyle();
+            Font titleFont = workbook.createFont();
+            titleFont.setBold(true);
+            titleFont.setFontHeightInPoints((short) 20);
+            titleStyle.setFont(titleFont);
+
             Map<String, CellStyle> styleCache = new HashMap<>();
 
             for (SheetData sheetData : sheetDataList) {
@@ -50,6 +56,15 @@ public class ExcelExporter {
 
                 int topOffset = sheetData.getTopOffset();
                 int leftOffset = sheetData.getLeftOffset();
+
+                // Page Title
+                if (sheetData.isPageTitle()) {
+                    Row titleRow = sheet.createRow(topOffset - 2);
+                    Cell titleCell = titleRow.createCell(leftOffset);
+                    titleCell.setCellValue(sheetData.getSheetName());
+                    titleCell.setCellStyle(titleStyle);
+                    sheet.createRow(topOffset - 1); // Second empty title row
+                }
 
                 // Create header row
                 Row headerRow = sheet.createRow(topOffset);

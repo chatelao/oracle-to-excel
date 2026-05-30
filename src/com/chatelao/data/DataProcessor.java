@@ -80,9 +80,13 @@ public class DataProcessor {
         List<SheetData> sheets = new ArrayList<>();
         int topOffset = sheetConfig.getTopOffset() != null ? sheetConfig.getTopOffset() : 0;
         int leftOffset = sheetConfig.getLeftOffset() != null ? sheetConfig.getLeftOffset() : 0;
+        boolean pageTitle = sheetConfig.isPageTitle();
+        if (pageTitle) {
+            topOffset += 2;
+        }
 
         if (!hasRows) {
-            sheets.add(new SheetData(sheetConfig.getName(), targetColumns, new ArrayList<>(), null, sheetConfig.getColumnColors(), topOffset, leftOffset, sheetConfig.isPivotTable()));
+            sheets.add(new SheetData(sheetConfig.getName(), targetColumns, new ArrayList<>(), null, sheetConfig.getColumnColors(), topOffset, leftOffset, sheetConfig.isPivotTable(), pageTitle));
             return sheets;
         }
 
@@ -105,7 +109,7 @@ public class DataProcessor {
                         int end = Math.min(i + partitionSize, allRows.size());
                         List<List<Object>> partition = allRows.subList(i, end);
                         String name = baseSheetName + "_" + partitionIndex;
-                        SheetData sd = new SheetData(name, targetColumns, new ArrayList<>(partition), null, sheetConfig.getColumnColors(), topOffset, leftOffset, sheetConfig.isPivotTable());
+                        SheetData sd = new SheetData(name, targetColumns, new ArrayList<>(partition), null, sheetConfig.getColumnColors(), topOffset, leftOffset, sheetConfig.isPivotTable(), pageTitle);
                         if (!filenamePart.isEmpty()) {
                             sd.setTargetFileName(filenamePart);
                         }
@@ -113,7 +117,7 @@ public class DataProcessor {
                         partitionIndex++;
                     }
                 } else {
-                    SheetData sd = new SheetData(baseSheetName, targetColumns, allRows, null, sheetConfig.getColumnColors(), topOffset, leftOffset, sheetConfig.isPivotTable());
+                    SheetData sd = new SheetData(baseSheetName, targetColumns, allRows, null, sheetConfig.getColumnColors(), topOffset, leftOffset, sheetConfig.isPivotTable(), pageTitle);
                     if (!filenamePart.isEmpty()) {
                         sd.setTargetFileName(filenamePart);
                     }

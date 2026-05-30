@@ -94,3 +94,4 @@ Support configurable column selection and category-based splitting.
 - [x] Support column background colors via `column_colors`. (2026-05-30)
 - [x] Support top and left offsets for tables via `top_offset` and `left_offset`. (2026-05-29)
 - [x] Support pivot table generation via `pivot_table` option. (2026-05-30)
+- [x] Support page title rows via `page_title` option. (2026-05-30)

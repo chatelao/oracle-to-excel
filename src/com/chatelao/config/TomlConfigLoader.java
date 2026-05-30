@@ -81,6 +81,11 @@ public class TomlConfigLoader {
                             sheetConfig.setPivotTable(pivotTable);
                         }
 
+                        Boolean pageTitle = sheetTable.getBoolean("page_title");
+                        if (pageTitle != null) {
+                            sheetConfig.setPageTitle(pageTitle);
+                        }
+
                         TomlArray columnsArray = sheetTable.getArray("columns");
                         if (columnsArray != null) {
                             sheetConfig.setColumns(toStringList(columnsArray));
