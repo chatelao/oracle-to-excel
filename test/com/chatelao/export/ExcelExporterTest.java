@@ -201,4 +201,47 @@ public class ExcelExporterTest {
             assertTrue(((XSSFSheet)pivotSheet).getPivotTables().size() > 0, "Pivot table should be created");
         }
     }
+
+    @Test
+    public void testExportWithPageTitle() throws Exception {
+        Path outputPath = tempDir.resolve("test_export_title.xlsx");
+
+        List<String> columnNames = Arrays.asList("ID", "NAME");
+        List<List<Object>> rows = Arrays.asList(
+                Arrays.asList(1, "Alice")
+        );
+        int topOffset = 0;
+        int leftOffset = 1;
+        // DataProcessor adds 2 to topOffset if pageTitle is true
+        SheetData sheetData = new SheetData("MySheet", columnNames, rows, null, null, topOffset + 2, leftOffset, false, true);
+
+        ExcelExporter exporter = new ExcelExporter();
+        exporter.export(Arrays.asList(sheetData), outputPath);
+
+        assertTrue(outputPath.toFile().exists());
+
+        try (Workbook workbook = new XSSFWorkbook(new FileInputStream(outputPath.toFile()))) {
+            Sheet sheet = workbook.getSheetAt(0);
+
+            // Row 0 should contain the title
+            Row titleRow = sheet.getRow(0);
+            assertNotNull(titleRow);
+            Cell titleCell = titleRow.getCell(leftOffset);
+            assertEquals("MySheet", titleCell.getStringCellValue());
+
+            // Verify title font size 20 and bold
+            CellStyle style = titleCell.getCellStyle();
+            Font font = workbook.getFontAt(style.getFontIndex());
+            assertTrue(font.getBold());
+            assertEquals(20, font.getFontHeightInPoints());
+
+            // Row 1 should be empty (second title row)
+            Row emptyRow = sheet.getRow(1);
+            assertNotNull(emptyRow);
+            assertNull(emptyRow.getCell(leftOffset));
+
+            // Row 2 should be the header
+            assertEquals("ID", sheet.getRow(2).getCell(leftOffset).getStringCellValue());
+        }
+    }
 }

@@ -111,6 +111,7 @@ The `[[exports.sheets]]` array (nested under an export) defines the sheets withi
 | `filename_columns` | Array | (Optional) Columns used to dynamically name files. |
 | `column_colors` | Table | (Optional) Map of column names to hex background colors (e.g., `#RRGGBB`). |
 | `pivot_table` | Boolean | (Optional) If `true`, generates a companion sheet with a pivot table. |
+| `page_title` | Boolean | (Optional) If `true`, adds two title rows at the top. The first row contains the sheet name in font size 20 and bold. |
 
 ---
 
@@ -210,6 +211,20 @@ filename = "contact_list.xlsx"
   columns = ["LAST_NAME", "FIRST_NAME", "EMAIL"]
 ```
 Only `LAST_NAME`, `FIRST_NAME`, and `EMAIL` will be exported, in that specific order.
+
+### Page Title
+You can add a large, bold title at the top of your sheets by enabling `page_title`.
+
+```toml
+[[exports]]
+filename = "styled_report.xlsx"
+  [[exports.sheets]]
+  name = "Sales_2024"
+  query = "SELECT * FROM sales"
+  # Enable page title
+  page_title = true
+```
+This will add two rows at the top. The first row will contain "Sales_2024" in font size 20, and the second row will be empty, followed by your data table.
 
 ### Column Background Colors
 You can highlight specific columns by defining background colors in the `column_colors` table. Colors are specified as hex codes.
