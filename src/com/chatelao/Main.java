@@ -23,7 +23,35 @@ import java.util.Properties;
 import java.util.concurrent.Callable;
 
 @Command(name = "oracle-to-excel", mixinStandardHelpOptions = true, version = "0.1.0",
-        description = "Exports Oracle database queries to Excel workbooks.")
+        description = "Exports Oracle database queries to Excel workbooks.",
+        footer = {
+                "",
+                "TOML Configuration Options:",
+                "",
+                "[database]",
+                "  url                The JDBC connection URL for the Oracle database.",
+                "  username           Database user account.",
+                "  password           Password for the database user.",
+                "",
+                "[audit]",
+                "  sheet              Name of the sheet where query execution details will be recorded.",
+                "",
+                "[[exports]]",
+                "  filename           The name of the target Excel file.",
+                "",
+                "[[exports.sheets]]",
+                "  name               The base name for the Excel sheet.",
+                "  query              The SQL query to execute (or path to a .sql file).",
+                "  partition_size     (Optional) Max rows per sheet. Splits into name_1, name_2, etc.",
+                "  top_offset         (Optional) Number of empty rows at the top of the sheet.",
+                "  left_offset        (Optional) Number of empty columns at the left of the sheet.",
+                "  columns            (Optional) List of columns to include and their order.",
+                "  sheetname_columns  (Optional) Columns used to dynamically name sheets.",
+                "  filename_columns   (Optional) Columns used to dynamically name files.",
+                "  column_colors      (Optional) Map of column names to hex background colors.",
+                "  pivot_table        (Optional) If true, generates a companion sheet with a pivot table.",
+                "  page_title         (Optional) If true, adds stylized title rows at the top."
+        })
 public class Main implements Callable<Integer> {
 
     @Option(names = {"-c", "--config"}, description = "Path to the TOML configuration file.", required = true)
