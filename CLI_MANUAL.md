@@ -102,7 +102,7 @@ The `[[exports.sheets]]` array (nested under an export) defines the sheets withi
 | Field | Type | Description |
 | --- | --- | --- |
 | `name` | String | The base name for the Excel sheet. |
-| `query` | String | The SQL query to execute. |
+| `query` | String | The SQL query to execute. Can also be a path to a `.sql` file relative to the TOML configuration. |
 | `partition_size` | Integer | (Optional) Max rows per sheet. Splits into `name_1`, `name_2`, etc. |
 | `top_offset` | Integer | (Optional) Number of empty rows at the top of the sheet. |
 | `left_offset` | Integer | (Optional) Number of empty columns at the left of the sheet. |

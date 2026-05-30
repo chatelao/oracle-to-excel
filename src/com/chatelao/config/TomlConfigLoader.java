@@ -6,6 +6,7 @@ import org.tomlj.TomlParseResult;
 import org.tomlj.TomlTable;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,7 +52,15 @@ public class TomlConfigLoader {
                         TomlTable sheetTable = sheetsArray.getTable(j);
                         SheetConfig sheetConfig = new SheetConfig();
                         sheetConfig.setName(sheetTable.getString("name"));
-                        sheetConfig.setQuery(sheetTable.getString("query"));
+                        String query = sheetTable.getString("query");
+                        if (query != null && query.toLowerCase().endsWith(".sql")) {
+                            Path parent = configPath.getParent();
+                            Path sqlPath = (parent != null) ? parent.resolve(query) : Path.of(query);
+                            if (Files.exists(sqlPath)) {
+                                query = Files.readString(sqlPath);
+                            }
+                        }
+                        sheetConfig.setQuery(query);
                         Long partitionSize = sheetTable.getLong("partition_size");
                         if (partitionSize != null) {
                             sheetConfig.setPartitionSize(partitionSize.intValue());
