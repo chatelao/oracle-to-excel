@@ -67,6 +67,11 @@ public class TomlConfigLoader {
                             sheetConfig.setLeftOffset(leftOffset.intValue());
                         }
 
+                        Boolean pivotTable = sheetTable.getBoolean("pivot_table");
+                        if (pivotTable != null) {
+                            sheetConfig.setPivotTable(pivotTable);
+                        }
+
                         TomlArray columnsArray = sheetTable.getArray("columns");
                         if (columnsArray != null) {
                             sheetConfig.setColumns(toStringList(columnsArray));

@@ -11,20 +11,25 @@ public class SheetData {
     private Map<String, String> columnColors;
     private int topOffset;
     private int leftOffset;
+    private boolean pivotTable;
 
     public SheetData(String sheetName, List<String> columnNames, List<List<Object>> rows) {
-        this(sheetName, columnNames, rows, null, null, 0, 0);
+        this(sheetName, columnNames, rows, null, null, 0, 0, false);
     }
 
     public SheetData(String sheetName, List<String> columnNames, List<List<Object>> rows, String targetFileName) {
-        this(sheetName, columnNames, rows, targetFileName, null, 0, 0);
+        this(sheetName, columnNames, rows, targetFileName, null, 0, 0, false);
     }
 
     public SheetData(String sheetName, List<String> columnNames, List<List<Object>> rows, String targetFileName, Map<String, String> columnColors) {
-        this(sheetName, columnNames, rows, targetFileName, columnColors, 0, 0);
+        this(sheetName, columnNames, rows, targetFileName, columnColors, 0, 0, false);
     }
 
     public SheetData(String sheetName, List<String> columnNames, List<List<Object>> rows, String targetFileName, Map<String, String> columnColors, int topOffset, int leftOffset) {
+        this(sheetName, columnNames, rows, targetFileName, columnColors, topOffset, leftOffset, false);
+    }
+
+    public SheetData(String sheetName, List<String> columnNames, List<List<Object>> rows, String targetFileName, Map<String, String> columnColors, int topOffset, int leftOffset, boolean pivotTable) {
         this.sheetName = sheetName;
         this.columnNames = columnNames;
         this.rows = rows;
@@ -32,6 +37,7 @@ public class SheetData {
         this.columnColors = columnColors;
         this.topOffset = topOffset;
         this.leftOffset = leftOffset;
+        this.pivotTable = pivotTable;
     }
 
     public String getSheetName() {
@@ -68,5 +74,9 @@ public class SheetData {
 
     public int getLeftOffset() {
         return leftOffset;
+    }
+
+    public boolean isPivotTable() {
+        return pivotTable;
     }
 }

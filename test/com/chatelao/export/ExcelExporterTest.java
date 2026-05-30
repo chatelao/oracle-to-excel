@@ -172,4 +172,33 @@ public class ExcelExporterTest {
             assertEquals(leftOffset + columnNames.size() - 1, autoFilterRange.getLastColumn());
         }
     }
+
+    @Test
+    public void testExportWithPivotTable() throws Exception {
+        Path outputPath = tempDir.resolve("test_export_pivot.xlsx");
+
+        List<String> columnNames = Arrays.asList("CATEGORY", "AMOUNT");
+        List<List<Object>> rows = Arrays.asList(
+                Arrays.asList("A", 100),
+                Arrays.asList("B", 200),
+                Arrays.asList("A", 150)
+        );
+        SheetData sheetData = new SheetData("Data", columnNames, rows, null, null, 0, 0, true);
+
+        ExcelExporter exporter = new ExcelExporter();
+        exporter.export(Arrays.asList(sheetData), outputPath);
+
+        assertTrue(outputPath.toFile().exists());
+
+        try (Workbook workbook = new XSSFWorkbook(new FileInputStream(outputPath.toFile()))) {
+            assertEquals(2, workbook.getNumberOfSheets());
+            Sheet dataSheet = workbook.getSheet("Data");
+            Sheet pivotSheet = workbook.getSheet("Data_Pivot");
+
+            assertNotNull(dataSheet);
+            assertNotNull(pivotSheet);
+
+            assertTrue(((XSSFSheet)pivotSheet).getPivotTables().size() > 0, "Pivot table should be created");
+        }
+    }
 }

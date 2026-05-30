@@ -13,6 +13,7 @@ public class SheetConfig {
     private Map<String, String> columnColors;
     private Integer topOffset;
     private Integer leftOffset;
+    private boolean pivotTable;
 
     public String getName() {
         return name;
@@ -84,5 +85,13 @@ public class SheetConfig {
 
     public void setLeftOffset(Integer leftOffset) {
         this.leftOffset = leftOffset;
+    }
+
+    public boolean isPivotTable() {
+        return pivotTable;
+    }
+
+    public void setPivotTable(boolean pivotTable) {
+        this.pivotTable = pivotTable;
     }
 }
