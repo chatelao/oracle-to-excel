@@ -110,6 +110,7 @@ The `[[exports.sheets]]` array (nested under an export) defines the sheets withi
 | `sheetname_columns` | Array | (Optional) Columns used to dynamically name sheets. |
 | `filename_columns` | Array | (Optional) Columns used to dynamically name files. |
 | `column_colors` | Table | (Optional) Map of column names to hex background colors (e.g., `#RRGGBB`). |
+| `pivot_table` | Boolean | (Optional) If `true`, generates a companion sheet with a pivot table. |
 
 ---
 

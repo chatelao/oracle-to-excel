@@ -2,9 +2,13 @@ package com.chatelao.export;
 
 import com.chatelao.model.SheetData;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
+import org.apache.poi.xssf.usermodel.XSSFPivotTable;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileOutputStream;
@@ -110,6 +114,30 @@ public class ExcelExporter {
                     sheet.autoSizeColumn(columnIndex);
                     // Add extra width for the filter arrow
                     sheet.setColumnWidth(columnIndex, sheet.getColumnWidth(columnIndex) + 1000);
+                }
+
+                // Pivot Table
+                if (sheetData.isPivotTable() && !rows.isEmpty() && !columnNames.isEmpty()) {
+                    Sheet pivotSheet = workbook.createSheet(sheetData.getSheetName() + "_Pivot");
+                    if (workbook instanceof XSSFWorkbook) {
+                        int lastRow = rows.size() + topOffset;
+                        int lastCol = columnNames.size() - 1 + leftOffset;
+                        AreaReference source = new AreaReference(
+                                new CellReference(topOffset, leftOffset),
+                                new CellReference(lastRow, lastCol),
+                                workbook.getSpreadsheetVersion()
+                        );
+
+                        XSSFPivotTable pivotTable = ((XSSFSheet) pivotSheet).createPivotTable(source, new CellReference(0, 0), sheet);
+
+                        // First column as row label
+                        pivotTable.addRowLabel(0);
+
+                        // Last column as SUM
+                        if (columnNames.size() > 1) {
+                            pivotTable.addColumnLabel(DataConsolidateFunction.SUM, columnNames.size() - 1);
+                        }
+                    }
                 }
             }
 
