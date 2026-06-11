@@ -8,6 +8,7 @@ public class SheetConfig {
     private String query;
     private Integer partitionSize;
     private List<String> columns;
+    private List<String> excludeColumns;
     private List<String> sheetnameColumns;
     private List<String> filenameColumns;
     private Map<String, String> columnColors;
@@ -46,6 +47,14 @@ public class SheetConfig {
 
     public void setColumns(List<String> columns) {
         this.columns = columns;
+    }
+
+    public List<String> getExcludeColumns() {
+        return excludeColumns;
+    }
+
+    public void setExcludeColumns(List<String> excludeColumns) {
+        this.excludeColumns = excludeColumns;
     }
 
     public List<String> getSheetnameColumns() {

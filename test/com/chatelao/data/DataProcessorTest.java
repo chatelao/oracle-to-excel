@@ -145,4 +145,38 @@ public class DataProcessorTest {
             }
         }
     }
+
+    @Test
+    public void testExcludeColumns() throws Exception {
+        try (Connection conn = DriverManager.getConnection("jdbc:h2:mem:test_exclude;DB_CLOSE_DELAY=-1", "sa", "")) {
+            try (Statement stmt = conn.createStatement()) {
+                stmt.execute("CREATE TABLE test_table_exclude (id INT, name VARCHAR(255), category VARCHAR(255))");
+                stmt.execute("INSERT INTO test_table_exclude VALUES (1, 'Alice', 'Cat1')");
+
+                try (ResultSet rs = stmt.executeQuery("SELECT * FROM test_table_exclude")) {
+                    DataProcessor processor = new DataProcessor();
+                    SheetConfig config = new SheetConfig();
+                    config.setName("ExcludeSheet");
+                    config.setExcludeColumns(Arrays.asList("CATEGORY", "ID"));
+                    config.setSheetnameColumns(Arrays.asList("CATEGORY"));
+
+                    List<SheetData> sheets = processor.processData(rs, config);
+
+                    assertEquals(1, sheets.size());
+                    SheetData data = sheets.get(0);
+
+                    // NAME should be the only remaining column
+                    assertEquals(1, data.getColumnNames().size());
+                    assertEquals("NAME", data.getColumnNames().get(0).toUpperCase());
+
+                    // But CATEGORY should still be used for naming
+                    assertEquals("ExcludeSheet_Cat1", data.getSheetName());
+
+                    List<Object> row = data.getRows().get(0);
+                    assertEquals(1, row.size());
+                    assertEquals("Alice", row.get(0));
+                }
+            }
+        }
+    }
 }

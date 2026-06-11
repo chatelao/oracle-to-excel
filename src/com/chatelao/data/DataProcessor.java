@@ -35,6 +35,25 @@ public class DataProcessor {
             }
         }
 
+        // Filter out excluded columns
+        List<String> excludeColumns = sheetConfig.getExcludeColumns();
+        if (excludeColumns != null && !excludeColumns.isEmpty()) {
+            List<String> filteredColumns = new ArrayList<>();
+            for (String col : targetColumns) {
+                boolean excluded = false;
+                for (String ex : excludeColumns) {
+                    if (col.equalsIgnoreCase(ex)) {
+                        excluded = true;
+                        break;
+                    }
+                }
+                if (!excluded) {
+                    filteredColumns.add(col);
+                }
+            }
+            targetColumns = filteredColumns;
+        }
+
         List<Integer> targetIndices = new ArrayList<>();
         for (String col : targetColumns) {
             targetIndices.add(rs.findColumn(col));
