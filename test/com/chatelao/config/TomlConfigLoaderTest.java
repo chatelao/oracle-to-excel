@@ -128,4 +128,28 @@ public class TomlConfigLoaderTest {
         Path nonExistentPath = tempDir.resolve("non_existent.toml");
         assertThrows(IOException.class, () -> loader.loadConfig(nonExistentPath));
     }
+
+    @Test
+    public void testLoadConfigWithIncludeExcludeColumns() throws IOException {
+        String tomlContent = "[[exports]]\n" +
+                "filename = \"report.xlsx\"\n" +
+                "[[exports.sheets]]\n" +
+                "name = \"Employees\"\n" +
+                "query = \"SELECT * FROM EMP\"\n" +
+                "include_columns = [\"ENAME\", \"JOB\"]\n" +
+                "exclude_columns = [\"SAL\"]\n";
+
+        Path configPath = tempDir.resolve("config_columns.toml");
+        Files.writeString(configPath, tomlContent);
+
+        TomlConfigLoader loader = new TomlConfigLoader();
+        Config config = loader.loadConfig(configPath);
+
+        SheetConfig sheet = config.getExports().get(0).getSheets().get(0);
+        assertEquals(2, sheet.getColumns().size());
+        assertTrue(sheet.getColumns().contains("ENAME"));
+        assertTrue(sheet.getColumns().contains("JOB"));
+        assertEquals(1, sheet.getExcludeColumns().size());
+        assertEquals("SAL", sheet.getExcludeColumns().get(0));
+    }
 }

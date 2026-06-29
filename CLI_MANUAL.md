@@ -108,6 +108,8 @@ The `[[exports.sheets]]` array (nested under an export) defines the sheets withi
 | `top_offset` | Integer | (Optional) Number of empty rows at the top of the sheet. |
 | `left_offset` | Integer | (Optional) Number of empty columns at the left of the sheet. |
 | `columns` | Array | (Optional) List of columns to include and their order. |
+| `include_columns` | Array | (Optional) Alias for `columns`. |
+| `exclude_columns` | Array | (Optional) List of columns to exclude from the final sheet. |
 | `sheetname_columns` | Array | (Optional) Columns used to dynamically name sheets. |
 | `filename_columns` | Array | (Optional) Columns used to dynamically name files. |
 | `column_colors` | Table | (Optional) Map of column names to hex background colors (e.g., `#RRGGBB`). |
@@ -200,8 +202,9 @@ filename = "emp_report.xlsx"
 If `DEPTNO` has 10 and 20, it will create `emp_report_10.xlsx` and `emp_report_20.xlsx`.
 
 ### Column Selection and Ordering
-Use the `columns` field to filter which columns are exported and define their order in the Excel file.
+Use the `columns` (or `include_columns`) field to filter which columns are exported and define their order in the Excel file. Use `exclude_columns` to remove specific columns from the output.
 
+#### Include Columns
 ```toml
 [[exports]]
 filename = "emp_contact_list.xlsx"
@@ -209,9 +212,24 @@ filename = "emp_contact_list.xlsx"
   name = "Contacts"
   query = "SELECT ENAME, JOB, SAL, COMM, EMPNO FROM EMP"
   # Explicitly select and order columns for export
-  columns = ["ENAME", "JOB", "SAL"]
+  include_columns = ["ENAME", "JOB", "SAL"]
 ```
 Only `ENAME`, `JOB`, and `SAL` will be exported, in that specific order.
+
+#### Exclude Columns
+You can exclude columns that might be used for other purposes like dynamic naming, but should not appear in the final table.
+
+```toml
+[[exports]]
+filename = "emp_report.xlsx"
+  [[exports.sheets]]
+  name = "Data"
+  query = "SELECT * FROM EMP"
+  # Exclude internal IDs and columns used for sheet naming
+  exclude_columns = ["EMPNO", "DEPTNO"]
+  sheetname_columns = ["DEPTNO"]
+```
+The `DEPTNO` column will be used to name the sheets (e.g., `Data_10`, `Data_20`), but neither `DEPTNO` nor `EMPNO` will appear as columns in the Excel sheets.
 
 ### Page Title
 You can add a large, bold title at the top of your sheets by enabling `page_title`.

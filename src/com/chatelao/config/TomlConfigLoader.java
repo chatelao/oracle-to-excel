@@ -86,9 +86,19 @@ public class TomlConfigLoader {
                             sheetConfig.setPageTitle(pageTitle);
                         }
 
-                        TomlArray columnsArray = sheetTable.getArray("columns");
-                        if (columnsArray != null) {
-                            sheetConfig.setColumns(toStringList(columnsArray));
+                        TomlArray includeColumnsArray = sheetTable.getArray("include_columns");
+                        if (includeColumnsArray != null) {
+                            sheetConfig.setColumns(toStringList(includeColumnsArray));
+                        } else {
+                            TomlArray columnsArray = sheetTable.getArray("columns");
+                            if (columnsArray != null) {
+                                sheetConfig.setColumns(toStringList(columnsArray));
+                            }
+                        }
+
+                        TomlArray excludeColumnsArray = sheetTable.getArray("exclude_columns");
+                        if (excludeColumnsArray != null) {
+                            sheetConfig.setExcludeColumns(toStringList(excludeColumnsArray));
                         }
 
                         TomlArray nameColumnsArray = sheetTable.getArray("sheetname_columns");

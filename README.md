@@ -64,6 +64,8 @@ The tool is configured via a TOML file. Below are the available sections and key
 - `query`: SQL query string or path to a `.sql` file (relative to config).
 - `partition_size`: (Optional) Max rows per sheet for partitioning.
 - `columns`: (Optional) List of columns to include and their order.
+- `include_columns`: (Optional) Alias for `columns`. If both are present, `include_columns` takes precedence.
+- `exclude_columns`: (Optional) List of columns to exclude from the sheet data. These columns can still be used in `sheetname_columns` or `filename_columns`.
 - `sheetname_columns`: (Optional) Columns used for dynamic sheet naming.
 - `filename_columns`: (Optional) Columns used for dynamic file naming.
 - `column_colors`: (Optional) Mapping of column names to hex colors (e.g., `{ TOTAL = "#90EE90" }`).
