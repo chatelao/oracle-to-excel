@@ -201,7 +201,7 @@ public class Main implements Callable<Integer> {
                 try {
                     exporter.export(sheets, Path.of(filename));
                     System.out.println("  Export completed: " + filename);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     System.err.println("  Error exporting to " + filename + ": " + e.getMessage());
                     return 1;
                 }

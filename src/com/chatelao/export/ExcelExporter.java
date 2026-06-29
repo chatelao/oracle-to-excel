@@ -23,6 +23,8 @@ import java.util.Map;
  */
 public class ExcelExporter {
 
+    private static final int MAX_COLUMN_WIDTH = 255 * 256;
+
     /**
      * Exports a list of SheetData objects to a single Excel workbook.
      *
@@ -126,9 +128,15 @@ public class ExcelExporter {
                 // Auto-fit columns
                 for (int i = 0; i < columnNames.size(); i++) {
                     int columnIndex = i + leftOffset;
-                    sheet.autoSizeColumn(columnIndex);
-                    // Add extra width for the filter arrow
-                    sheet.setColumnWidth(columnIndex, sheet.getColumnWidth(columnIndex) + 1000);
+                    try {
+                        sheet.autoSizeColumn(columnIndex);
+                        int width = sheet.getColumnWidth(columnIndex) + 1000;
+                        sheet.setColumnWidth(columnIndex, Math.min(width, MAX_COLUMN_WIDTH));
+                    } catch (Exception e) {
+                        String columnName = columnNames.get(i);
+                        throw new RuntimeException("Error setting column width for sheet '" + sheetData.getSheetName() +
+                                "', column '" + columnName + "': " + e.getMessage(), e);
+                    }
                 }
 
                 // Pivot Table
