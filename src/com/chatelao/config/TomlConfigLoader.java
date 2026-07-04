@@ -44,6 +44,9 @@ public class TomlConfigLoader {
                 TomlTable exportTable = exportsArray.getTable(i);
                 ExportConfig exportConfig = new ExportConfig();
                 exportConfig.setFilename(exportTable.getString("filename"));
+                exportConfig.setDelimiter(exportTable.getString("delimiter"));
+                exportConfig.setQuoteChar(exportTable.getString("quote_char"));
+                exportConfig.setEscapeChar(exportTable.getString("escape_char"));
 
                 TomlArray sheetsArray = exportTable.getArray("sheets");
                 if (sheetsArray != null) {

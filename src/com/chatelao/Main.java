@@ -2,6 +2,7 @@ package com.chatelao;
 
 import com.chatelao.config.*;
 import com.chatelao.data.DataProcessor;
+import com.chatelao.export.CsvExporter;
 import com.chatelao.export.ExcelExporter;
 import com.chatelao.model.SheetData;
 import picocli.CommandLine;
@@ -37,7 +38,10 @@ import java.util.concurrent.Callable;
                 "  sheet              Name of the sheet where query execution details will be recorded.",
                 "",
                 "[[exports]]",
-                "  filename           The name of the target Excel file.",
+                "  filename           The name of the target export file (Excel, CSV, or TSV).",
+                "  delimiter          (Optional) CSV delimiter (default: \",\").",
+                "  quote_char         (Optional) CSV quote character (default: '\"').",
+                "  escape_char        (Optional) CSV escape character (default: '\"').",
                 "",
                 "[[exports.sheets]]",
                 "  name               The base name for the Excel sheet.",
@@ -199,7 +203,16 @@ public class Main implements Callable<Integer> {
                 }
 
                 try {
-                    exporter.export(sheets, Path.of(filename));
+                    if (filename.toLowerCase().endsWith(".csv") || filename.toLowerCase().endsWith(".tsv")) {
+                        String delimiter = export.getDelimiter();
+                        if (delimiter == null && filename.toLowerCase().endsWith(".tsv")) {
+                            delimiter = "\t";
+                        }
+                        CsvExporter csvExporter = new CsvExporter(delimiter, export.getQuoteChar(), export.getEscapeChar());
+                        csvExporter.export(sheets, Path.of(filename));
+                    } else {
+                        exporter.export(sheets, Path.of(filename));
+                    }
                     System.out.println("  Export completed: " + filename);
                 } catch (Exception e) {
                     System.err.println("  Error exporting to " + filename + ": " + e.getMessage());

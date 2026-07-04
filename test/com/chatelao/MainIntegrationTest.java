@@ -5,6 +5,7 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Locale;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -49,6 +50,45 @@ public class MainIntegrationTest {
             assertEquals(0, exitCode, "Application should exit with 0");
 
             assertTrue(Files.exists(exportPath), "Export file should exist at " + exportPath);
+        }
+    }
+
+    @Test
+    public void testCsvExportWithCustomDelimiter() throws Exception {
+        String dbUrl = "jdbc:h2:mem:csv_test;DB_CLOSE_DELAY=-1";
+        try (Connection conn = DriverManager.getConnection(dbUrl, "sa", "")) {
+            try (Statement stmt = conn.createStatement()) {
+                stmt.execute("CREATE TABLE csv_test_table (id INT, name VARCHAR(255))");
+                stmt.execute("INSERT INTO csv_test_table VALUES (1, 'Alice; Jones')");
+                stmt.execute("INSERT INTO csv_test_table VALUES (2, 'Bob')");
+            }
+
+            Path configPath = tempDir.resolve("csv_config.toml");
+            Path exportPath = tempDir.resolve("export.csv");
+
+            String configContent = "[database]\n" +
+                    "url = \"" + dbUrl + "\"\n" +
+                    "username = \"sa\"\n" +
+                    "password = \"\"\n" +
+                    "\n" +
+                    "[[exports]]\n" +
+                    "filename = \"" + exportPath.toString().replace("\\", "\\\\") + "\"\n" +
+                    "delimiter = \";\"\n" +
+                    "quote_char = \"'\"\n" +
+                    "sheets = [\n" +
+                    "    { name = \"Sheet1\", query = \"SELECT * FROM csv_test_table ORDER BY ID\" }\n" +
+                    "]\n";
+            Files.writeString(configPath, configContent);
+
+            int exitCode = Main.execute(new String[]{"-c", configPath.toString()});
+            assertEquals(0, exitCode);
+
+            assertTrue(Files.exists(exportPath), "CSV export file should exist");
+            List<String> lines = Files.readAllLines(exportPath);
+            assertEquals(3, lines.size());
+            assertEquals("ID;NAME", lines.get(0));
+            assertEquals("1;'Alice; Jones'", lines.get(1));
+            assertEquals("2;Bob", lines.get(2));
         }
     }
 
