@@ -9,6 +9,7 @@ A command-line tool to export Oracle database queries into Excel workbooks. Supp
 - **Row Partitioning**: Automatically split large query results across multiple sheets based on a configurable row limit.
 - **TOML Configuration**: Easy-to-use configuration format for defining database connections and export tasks.
 - **Standalone JAR**: Distributed as a single executable JAR file with all dependencies included.
+- **CSV/TSV Export**: Support for exporting to CSV and TSV formats with configurable delimiters, quoting, and escaping.
 
 ## Installation
 
@@ -73,6 +74,11 @@ The tool is configured via a TOML file. Below are the available sections and key
 - `left_offset`: (Optional) Number of empty columns at the left of the sheet.
 - `pivot_table`: (Optional) Boolean to generate a companion pivot table sheet.
 - `page_title`: (Optional) Boolean to add a large, stylized title row at the top.
+
+### CSV/TSV Specific Options (in `[[exports]]`)
+- `delimiter`: (Optional) The character used to separate values (default: `,` for CSV, `\t` for TSV).
+- `quote_char`: (Optional) The character used to wrap fields (default: `"`).
+- `escape_char`: (Optional) The character used to escape the quote character within a field (default: `"`).
 
 ### Configuration Example (`config.toml`)
 

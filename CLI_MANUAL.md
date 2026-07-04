@@ -116,6 +116,13 @@ The `[[exports.sheets]]` array (nested under an export) defines the sheets withi
 | `pivot_table` | Boolean | (Optional) If `true`, generates a companion sheet with a pivot table. |
 | `page_title` | Boolean | (Optional) If `true`, adds two title rows at the top. The first row contains the sheet name in font size 20 and bold. |
 
+### CSV/TSV Specific Options (in `[[exports]]`)
+| Field | Type | Description |
+| --- | --- | --- |
+| `delimiter` | String | (Optional) The character used to separate values (default: `,` for CSV, `\t` for TSV). |
+| `quote_char` | String | (Optional) The character used to wrap fields (default: `"`). |
+| `escape_char` | String | (Optional) The character used to escape the quote character within a field (default: `"`). |
+
 ---
 
 ## Use Case Examples
@@ -167,6 +174,33 @@ filename = "hr_reports.xlsx"
 filename = "salary_reports.xlsx"
   [[exports.sheets]]
   name = "Salaries"
+  query = "SELECT * FROM EMP"
+```
+
+### CSV/TSV Export
+Export data to CSV or TSV format with custom formatting.
+
+```toml
+[[exports]]
+filename = "emp_data.csv"
+# Use semicolon as delimiter
+delimiter = ";"
+# Use single quote for wrapping fields
+quote_char = "'"
+# Use backslash for escaping
+escape_char = "\\"
+  [[exports.sheets]]
+  name = "All_Employees"
+  query = "SELECT * FROM EMP"
+```
+
+For TSV files, the tab delimiter is automatically used if not explicitly specified:
+
+```toml
+[[exports]]
+filename = "emp_data.tsv"
+  [[exports.sheets]]
+  name = "All_Employees"
   query = "SELECT * FROM EMP"
 ```
 
